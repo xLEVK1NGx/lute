@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lute-theme"
+version = "0.0.1-alpha"
+description = "Unified theme switcher for various Linux apps"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "levk1ng" }]
+license = { text = "GPL v3.0" }
+dependencies = [
+    "rich>=13.0",
+    "click>=8.1",
+]
+
+[project.scripts]
+lute = "lute.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lute"]

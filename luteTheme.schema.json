@@ -1,0 +1,168 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Standard Lute Theme schema",
+	"type": "object",
+	"required": ["metadata", "colors"],
+	"properties": {
+	  "metadata": {
+	    "type": "object",
+	    "required": ["name", "authors", "theme_version", "lute_version", "variant"],
+	    "properties": {
+	      "name":	       { "type": "string" },
+	      "authors":       { "type": "array", "items": { "type": "string" } },
+	      "theme_version": { "type": "string" },
+	      "lute_version":  { "type": "string" },
+	      "variant":       { "type": "string", "enum": ["dark", "light"] },
+	      "description":   { "type": "string" }
+	    }
+	  },
+
+	  "colors": {
+	    "type": "object",
+	    "required": ["palette", "UI", "semantic", "terminal"],
+	    "properties": {
+
+	      "palette": {
+		"type": "object",
+		"properties": {
+		  "black":  { "type": "string" },
+		  "white":  { "type": "string" },
+		  "gray":   { "$ref": "#/$defs/ColorVariants" },
+		  "red":    { "$ref": "#/$defs/ColorVariants" },
+		  "orange": { "$ref": "#/$defs/ColorVariants" },
+		  "yellow": { "$ref": "#/$defs/ColorVariants" },
+		  "green":  { "$ref": "#/$defs/ColorVariants" },
+		  "cyan":   { "$ref": "#/$defs/ColorVariants" },
+		  "blue":   { "$ref": "#/$defs/ColorVariants" },
+		  "purple": { "$ref": "#/$defs/ColorVariants" },
+		  "pink":   { "$ref": "#/$defs/ColorVariants" }
+		}
+	      },
+
+	      "UI": {
+		"type": "object",
+		"required": ["background", "foreground", "accent", "selection"],
+		"properties": {
+		  "background": { "$ref": "#/$defs/ColorVariants" },
+		  "surface":	{ "$ref": "#/$defs/ColorVariants" },
+		  "foreground": { "$ref": "#/$defs/ColorVariants" },
+		  "accent":	{ "$ref": "#/$defs/ColorVariants" },
+		  "accent_alt": { "$ref": "#/$defs/ColorVariants" },
+		  "selection":	{ "$ref": "#/$defs/ColorVariants" },
+		  "hover":	{ "$ref": "#/$defs/ColorVariants" },
+		  "overlay":	{ "$ref": "#/$defs/ColorVariants" },
+		  "text": {
+		    "type": "object",
+		    "properties": {
+		      "base":	  { "$ref": "#/$defs/ColorVariants" },
+		      "muted":	  { "$ref": "#/$defs/ColorVariants" },
+		      "disabled": { "$ref": "#/$defs/ColorVariants" },
+		      "inverse":  { "$ref": "#/$defs/ColorVariants" }
+		    }
+		  },
+		  "border": {
+		    "type": "object",
+		    "properties": {
+		      "base":	 { "$ref": "#/$defs/ColorVariants" },
+		      "focused": { "$ref": "#/$defs/ColorVariants" }
+		    }
+		  }
+		}
+	      },
+
+	      "semantic": {
+		"type": "object",
+		"required": ["info", "warning", "error", "success", "feedback"],
+		"properties": {
+		  "info":     { "type": "string" },
+		  "warning":  { "type": "string" },
+		  "error":    { "type": "string" },
+		  "success":  { "type": "string" },
+		  "feedback": { "type": "string" }
+		}
+	      },
+
+	      "terminal": {
+		"type": "object",
+		"required": ["ansi"],
+		"properties": {
+		  "ansi": {
+		    "oneOf": [
+		      {
+			"type": "object",
+			"description": "Named format: black/red/green/.../white, each with base + bright",
+			"properties": {
+			  "black":   { "$ref": "#/$defs/AnsiColor" },
+			  "red":     { "$ref": "#/$defs/AnsiColor" },
+			  "green":   { "$ref": "#/$defs/AnsiColor" },
+			  "yellow":  { "$ref": "#/$defs/AnsiColor" },
+			  "blue":    { "$ref": "#/$defs/AnsiColor" },
+			  "magenta": { "$ref": "#/$defs/AnsiColor" },
+			  "cyan":    { "$ref": "#/$defs/AnsiColor" },
+			  "white":   { "$ref": "#/$defs/AnsiColor" }
+			}
+		      },
+		      {
+			"type": "object",
+			"description": "Indexed format: '0' through '15' mapping to hex strings",
+			"patternProperties": {
+			  "^([0-9]|1[0-5])$": { "type": "string" }
+			},
+			"additionalProperties": false
+		      }
+		    ]
+		  },
+		  "foreground": { "type": "string" },
+		  "background": { "type": "string" },
+		  "cursor":	{ "type": "string" },
+		  "cursor_text": { "type": "string" },
+		  "selection": {
+		    "type": "object",
+		    "properties": {
+		      "background": { "type": "string" },
+		      "foreground": { "type": "string" }
+		    }
+		  },
+		  "url": { "type": "string" },
+		  "tabs": {
+		    "type": "object",
+		    "properties": {
+		      "active_background":   { "type": "string" },
+		      "active_foreground":   { "type": "string" },
+		      "inactive_background": { "type": "string" },
+		      "inactive_foreground": { "type": "string" }
+		    }
+		  }
+		}
+	      }
+
+	    }
+	  }
+
+	},
+
+	"$defs": {
+	  "ColorVariants": {
+	    "oneOf": [
+	      { "type": "string" },
+	      {
+		"type": "object",
+		"required": ["base"],
+		"properties": {
+		  "base":  { "type": "string" },
+		  "dark":  { "type": "string" },
+		  "light": { "type": "string" }
+		}
+	      }
+	    ]
+	  },
+	  "AnsiColor": {
+	    "type": "object",
+	    "required": ["base", "bright"],
+	    "properties": {
+	      "base":	{ "type": "string" },
+	      "bright": { "type": "string" }
+	    }
+	  }
+	}
+}
