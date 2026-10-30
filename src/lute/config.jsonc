@@ -1,1 +1,9 @@
 // this is lute's default settings
+{
+	// just the theme (file)name, no ".jsonc"
+	"selected_theme": "default",
+	// ez mode generates overrides for configs. 
+	// without it, the only thing generated is a list of variables/values
+	// for each plugged app.
+	"ez_mode": false
+}
