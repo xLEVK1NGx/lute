@@ -1,35 +1,46 @@
-import lute.config as config
+from lute.config import *
+from importlib.resources import files, as_file
 from dataclasses import *
+from jsonschema import validate, Draft202012Validator
+import json5 as json
 
+config = Config.load()
+
+def load_jsonc(path):
+    with open(path, encoding="UTF-8") as file:
+        return json.load(file)
+
+def load_jsonc_validate(path: Path):
+    # load schema
+    with as_file(files("lute").joinpath("theme.schema.json")) as file:
+        schema = load_jsonc(file) 
+    # validate schema
+    Draft202012Validator.check_schema(schema)
+    # get theme data
+    theme_data = load_jsonc(path)
+    # validate the data with the schema
+    validate(instance=theme_data, schema=schema)
+
+
+
+@dataclass
 class Theme():
-    name: str
-    description: str
-    authors: list
-    version: str
-    lute_version: str
-    variant: str
-    darkest: str
-    darker: str
-    lighter: str
-    lightest: str
-
-    colors: dict
-
     @classmethod
-    def from_dict(cls, data: dict) -> "Theme":
-        metadata = data["metadata"]
+    def load(cls):
+        defaults_path = files("lute").joinpath("defaults.jsonc")
+        defaults = load_jsonc(defaults_path)
 
-        return cls(
-            name = metadata["name"]
-            description = metadata["description"]
-            author = metadata["author"]
-            version = metadata["version"]
-            lute_version = metadata["lute_version"]
-            variant = metadata["variant"]
-            darkest = metadata["darkest"]
-            darker = metadata["darker"]
-            lighter = metadata["lighter"]
-            lightest = metadata["lightest"]
-            colors = data["colors"]
-                )
+        user_defaults_path = config.lute_dir / "user_defaults.jsonc"
+        user_defaults = load_jsonc(user_defaults_path)
 
+        selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
+        selected_theme = load_jsonc_validate(selected_theme_path)
+
+        user_overrides_path = config.themes_dir / "user_overrides.jsonc"
+        user_overrides = load_jsonc(user_overrides_path)
+
+
+)
+        
+        # load each layer DONE → normalize each layer → deep-merge in order → resolve references → create Theme
+        

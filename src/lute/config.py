@@ -28,6 +28,9 @@ def load_config():
 
 @dataclass
 class Config():
+    lute_dir: Path
+    themes_dir: Path
+
     selected_theme: str
     ez_mode: bool
 
@@ -35,6 +38,9 @@ class Config():
     def load(cls) -> "Config":
         loaded = load_config()
         return cls(
+            lute_dir = LUTE_DIR
+            themes_dir = THEMES_DIR
+
             selected_theme = loaded["selected_theme"],
             ez_mode = loaded["ez_mode"]
                 )
