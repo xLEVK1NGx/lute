@@ -1,0 +1,912 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "LUTE theme input schema",
+    "description": "Validates a complete theme input before layer merging and reference resolution. Optional layers require partial validation.",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "authors": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "theme_version": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "lute_version": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "variant": {
+                    "enum": [
+                        "dark",
+                        "light"
+                    ]
+                },
+                "description": {
+                    "type": "string"
+                },
+                "lightest_ver": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Theme name relative to the themes directory, without .jsonc."
+                },
+                "lighter_ver": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Theme name relative to the themes directory, without .jsonc."
+                },
+                "darker_ver": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Theme name relative to the themes directory, without .jsonc."
+                },
+                "darkest_ver": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Theme name relative to the themes directory, without .jsonc."
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "authors",
+                "theme_version",
+                "lute_version",
+                "variant"
+            ]
+        },
+        "colors": {
+            "type": "object",
+            "properties": {
+                "palette": {
+                    "type": "object",
+                    "properties": {
+                        "black": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "white": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "gray": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "red": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "orange": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "yellow": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "green": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "cyan": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "blue": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "purple": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "pink": {
+                            "$ref": "#/$defs/ColorVariants"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "black",
+                        "white",
+                        "gray",
+                        "red",
+                        "yellow",
+                        "green",
+                        "cyan",
+                        "blue",
+                        "pink"
+                    ]
+                },
+                "UI": {
+                    "type": "object",
+                    "properties": {
+                        "background": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "surface": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "foreground": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "accent": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "accent_alt": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "selection": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "hover": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "overlay": {
+                            "$ref": "#/$defs/ColorVariants"
+                        },
+                        "text": {
+                            "type": "object",
+                            "properties": {
+                                "base": {
+                                    "$ref": "#/$defs/ColorVariants"
+                                },
+                                "muted": {
+                                    "$ref": "#/$defs/ColorVariants"
+                                },
+                                "disabled": {
+                                    "$ref": "#/$defs/ColorVariants"
+                                },
+                                "inverse": {
+                                    "$ref": "#/$defs/ColorVariants"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "border": {
+                            "type": "object",
+                            "properties": {
+                                "base": {
+                                    "$ref": "#/$defs/ColorVariants"
+                                },
+                                "focused": {
+                                    "$ref": "#/$defs/ColorVariants"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "background",
+                        "foreground",
+                        "accent"
+                    ]
+                },
+                "semantic": {
+                    "type": "object",
+                    "properties": {
+                        "info": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "warning": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "error": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "success": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "feedback": {
+                            "$ref": "#/$defs/ColorValue"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "terminal": {
+                    "type": "object",
+                    "properties": {
+                        "ansi": {
+                            "$ref": "#/$defs/Ansi"
+                        },
+                        "foreground": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "background": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "cursor": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "cursor_text": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "url": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "selection": {
+                            "type": "object",
+                            "properties": {
+                                "background": {
+                                    "$ref": "#/$defs/ColorValue"
+                                },
+                                "foreground": {
+                                    "$ref": "#/$defs/ColorValue"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "tabs": {
+                            "type": "object",
+                            "properties": {
+                                "active_background": {
+                                    "$ref": "#/$defs/ColorValue"
+                                },
+                                "active_foreground": {
+                                    "$ref": "#/$defs/ColorValue"
+                                },
+                                "inactive_background": {
+                                    "$ref": "#/$defs/ColorValue"
+                                },
+                                "inactive_foreground": {
+                                    "$ref": "#/$defs/ColorValue"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "palette",
+                "UI"
+            ]
+        },
+        "geometry": {
+            "type": "object",
+            "properties": {
+                "corner_shape": {
+                    "enum": [
+                        "round",
+                        "beveled",
+                        "sharp"
+                    ]
+                },
+                "corner_radius": {
+                    "$ref": "#/$defs/CornerRadius"
+                },
+                "border_width": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "gaps": {
+                    "$ref": "#/$defs/Gaps"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "corner_shape",
+                "corner_radius"
+            ]
+        },
+        "spacing": {
+            "type": "object",
+            "properties": {
+                "padding": {
+                    "$ref": "#/$defs/SpacingScale"
+                },
+                "margin": {
+                    "$ref": "#/$defs/SpacingScale"
+                }
+            },
+            "additionalProperties": false
+        },
+        "fonts": {
+            "type": "object",
+            "properties": {
+                "sizes": {
+                    "$ref": "#/$defs/FontSizes"
+                },
+                "normal": {
+                    "$ref": "#/$defs/FontSlot"
+                },
+                "serif": {
+                    "$ref": "#/$defs/FontSlot"
+                },
+                "monospace": {
+                    "$ref": "#/$defs/FontSlot"
+                },
+                "title": {
+                    "$ref": "#/$defs/FontSlot"
+                },
+                "small": {
+                    "$ref": "#/$defs/FontSlot"
+                }
+            },
+            "additionalProperties": false
+        },
+        "effects": {
+            "type": "object",
+            "properties": {
+                "blur": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_blur"
+                        },
+                        "window_bg": {
+                            "$ref": "#/$defs/Effect_blur"
+                        },
+                        "inactive_windows": {
+                            "$ref": "#/$defs/Effect_blur"
+                        },
+                        "overlay": {
+                            "$ref": "#/$defs/Effect_blur"
+                        },
+                        "panel": {
+                            "$ref": "#/$defs/Effect_blur"
+                        },
+                        "wallpaper": {
+                            "$ref": "#/$defs/Effect_blur"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "glass": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_glass"
+                        },
+                        "panel": {
+                            "$ref": "#/$defs/Effect_glass"
+                        },
+                        "overlay": {
+                            "$ref": "#/$defs/Effect_glass"
+                        },
+                        "interactive": {
+                            "$ref": "#/$defs/Effect_glass"
+                        },
+                        "active_window": {
+                            "$ref": "#/$defs/Effect_glass"
+                        },
+                        "inactive_windows": {
+                            "$ref": "#/$defs/Effect_glass"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "opacity": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_opacity"
+                        },
+                        "active_window": {
+                            "$ref": "#/$defs/Effect_opacity"
+                        },
+                        "inactive_windows": {
+                            "$ref": "#/$defs/Effect_opacity"
+                        },
+                        "window_bg": {
+                            "$ref": "#/$defs/Effect_opacity"
+                        },
+                        "panel": {
+                            "$ref": "#/$defs/Effect_opacity"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "dimming": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_dimming"
+                        },
+                        "active_window": {
+                            "$ref": "#/$defs/Effect_dimming"
+                        },
+                        "inactive_windows": {
+                            "$ref": "#/$defs/Effect_dimming"
+                        },
+                        "overlay": {
+                            "$ref": "#/$defs/Effect_dimming"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "shadows": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_shadows"
+                        },
+                        "window_bg": {
+                            "$ref": "#/$defs/Effect_shadows"
+                        },
+                        "overlay": {
+                            "$ref": "#/$defs/Effect_shadows"
+                        },
+                        "panel": {
+                            "$ref": "#/$defs/Effect_shadows"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "pixelate": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_pixelate"
+                        },
+                        "full_screen": {
+                            "$ref": "#/$defs/Effect_pixelate"
+                        },
+                        "wallpaper": {
+                            "$ref": "#/$defs/Effect_pixelate"
+                        },
+                        "app_icons": {
+                            "$ref": "#/$defs/Effect_pixelate"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "glow": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_glow"
+                        },
+                        "active_window": {
+                            "$ref": "#/$defs/Effect_glow"
+                        },
+                        "window_bg": {
+                            "$ref": "#/$defs/Effect_glow"
+                        },
+                        "overlay": {
+                            "$ref": "#/$defs/Effect_glow"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "saturation": {
+                    "type": "object",
+                    "properties": {
+                        "default": {
+                            "$ref": "#/$defs/Effect_saturation"
+                        },
+                        "full_screen": {
+                            "$ref": "#/$defs/Effect_saturation"
+                        },
+                        "wallpaper": {
+                            "$ref": "#/$defs/Effect_saturation"
+                        },
+                        "inactive_windows": {
+                            "$ref": "#/$defs/Effect_saturation"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "metadata",
+        "colors",
+        "geometry"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+        "ColorValue": {
+            "type": "string",
+            "anyOf": [
+                {
+                    "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+                },
+                {
+                    "pattern": "^(?:palette|UI|semantic|terminal)(?:\\.[A-Za-z0-9_]+)+$"
+                }
+            ]
+        },
+        "ColorVariants": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "base": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "dark": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "light": {
+                            "$ref": "#/$defs/ColorValue"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "base"
+                    ]
+                }
+            ],
+            "x-lute-normalize": "color_variants"
+        },
+        "NonnegativeInteger": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "SideValues": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/NonnegativeInteger"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/NonnegativeInteger"
+                    },
+                    "minItems": 1,
+                    "maxItems": 4
+                }
+            ],
+            "x-lute-normalize": "side_values"
+        },
+        "CornerRadius": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/NonnegativeInteger"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/NonnegativeInteger"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                }
+            ],
+            "x-lute-normalize": "corner_radius"
+        },
+        "Gaps": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/NonnegativeInteger"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "inner": {
+                            "$ref": "#/$defs/SideValues"
+                        },
+                        "outer": {
+                            "$ref": "#/$defs/SideValues"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ],
+            "x-lute-normalize": "gaps"
+        },
+        "SpacingScale": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/NonnegativeInteger"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "sm": {
+                            "$ref": "#/$defs/NonnegativeInteger"
+                        },
+                        "md": {
+                            "$ref": "#/$defs/NonnegativeInteger"
+                        },
+                        "lg": {
+                            "$ref": "#/$defs/NonnegativeInteger"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ],
+            "x-lute-normalize": "spacing_scale"
+        },
+        "FontSizes": {
+            "type": "object",
+            "properties": {
+                "min": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "base": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                },
+                "max": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "additionalProperties": false
+        },
+        "FontSlot": {
+            "type": "object",
+            "properties": {
+                "family": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "style": {
+                    "enum": [
+                        "normal",
+                        "italic",
+                        "oblique"
+                    ]
+                },
+                "sizes": {
+                    "$ref": "#/$defs/FontSizes"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "family"
+            ]
+        },
+        "Ansi": {
+            "type": "object",
+            "properties": {
+                "0": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "1": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "2": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "3": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "4": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "5": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "6": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "7": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "8": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "9": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "10": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "11": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "12": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "13": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "14": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "15": {
+                    "$ref": "#/$defs/ColorValue"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15"
+            ]
+        },
+        "Effect_blur": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "strength": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "passes": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "noise": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_glass": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "blur": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "tint": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "tint_opacity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "noise": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "border": {
+                    "type": "boolean"
+                },
+                "highlight": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "color": {
+                            "$ref": "#/$defs/ColorValue"
+                        },
+                        "opacity": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                        },
+                        "position": {
+                            "enum": [
+                                "top",
+                                "bottom",
+                                "left",
+                                "right",
+                                "top_left",
+                                "top_right",
+                                "bottom_right",
+                                "bottom_left"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_opacity": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_dimming": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "strength": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_shadows": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "range": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "offset_x": {
+                    "type": "number"
+                },
+                "offset_y": {
+                    "type": "number"
+                },
+                "color": {
+                    "$ref": "#/$defs/ColorValue"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_pixelate": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "block_size": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_glow": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "color": {
+                    "$ref": "#/$defs/ColorValue"
+                },
+                "range": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "intensity": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "Effect_saturation": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            },
+            "additionalProperties": false
+        }
+    }
+}
