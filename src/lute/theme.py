@@ -121,13 +121,9 @@ def normalize_color_variants(value):
 def normalize_corner_radius(value):
     if isinstance(value, int) and not isinstance(value, bool):
         return [value, value, value, value]
-    if isinstance(value, list):
-        return value
     return value
 
 def normalize_gaps(value):
-    if isinstance(value, dict):
-       return value
     if isinstance(value, int): 
         return {"inner": value, "outer": value}
     return value
@@ -152,28 +148,60 @@ def normalize_spacing_scale(value):
         return {"sm": value, "md": value, "lg": value}
     return value
 
+# merging layers
+
+@dataclass
+class ColorReferenceWithPartOverride():
+    base: str           # base color reference e.g. border = "palette.red"
+    overrides: dict     # dict of overrides for the specific field, e.g. border = {"light": "#ff9999"}
+
+class ColorReference():
+    color_reference: str # what even is that class... i need a method to resolve it
+
+def resolve_color_references(data: dict):
+    pass
+
+def deep_merge(base: dict, overrides: dict):
+    resolve_color_references(base)
+    resolve_color_references(overrides)
+    for field in base:
+        if field in overrides:
+            if isinstance(base[field], dict) and isinstance(overrides[field], dict):
+                deep_merge(base[field], overrides[field])
+            elif isinstance(base[field], ColorReference) and isinstance(overrides[field], dict):
+                pass
+                ColorReferenceWithPartOverride.new()
+            else:
+                base[field] = overrides[field]
 
 @dataclass
 class Theme():
     @classmethod
     def load(cls) -> "Theme":
+        with as_file(files("lute").joinpath("theme.schema.json")) as file:
+            schema = load_jsonc(file)
+
             defaults_path = files("lute").joinpath("defaults.jsonc")
             defaults = load_jsonc_noreq(defaults_path)
+            recursive_normalization(defaults, schema, schema)
 
             user_defaults_path = config.lute_dir / "user_defaults.jsonc"
             user_defaults = {}
             if user_defaults_path.exists():
                 user_defaults = load_jsonc_noreq(user_defaults_path)
+            recursive_normalization(user_defaults, schema, schema)
 
             selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
             selected_theme = load_jsonc_req(selected_theme_path)
+            recursive_normalization(selected_theme, schema, schema)
 
             user_overrides_path = config.lute_dir / "user_overrides.jsonc"
             user_overrides = {}
             if user_overrides_path.exists():
                 user_overrides = load_jsonc_noreq(user_overrides_path)
+            recursive_normalization(user_overrides, schema, schema)
 
             return cls()
 
-        # load each layer DONE → normalize each layer → deep-merge in order → resolve references → create Theme
+        # load each layer DONE → normalize each layer DONE → deep-merge in order → resolve references → create Theme
 
