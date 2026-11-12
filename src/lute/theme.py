@@ -152,25 +152,48 @@ def normalize_spacing_scale(value):
 
 @dataclass
 class ColorReferenceWithPartOverride():
-    base: str           # base color reference e.g. border = "palette.red"
+    base: ColorReference# base color reference e.g. border = "palette.red"
     overrides: dict     # dict of overrides for the specific field, e.g. border = {"light": "#ff9999"}
 
+@dataclass
 class ColorReference():
-    color_reference: str # what even is that class... i need a method to resolve it
+    color_reference: str
+    steps: list
+    def resolve(self, schema: dict): # returns the actual theme of that reference
+        def create_steps(ref: str):
+            # sep str into steps (1.2.3.4...)
+            temp_steps = []
+            tmp = ""
+            for l in ref:
+                if l == ".":
+                    temp_steps.append(tmp)
+                    tmp = ""
+                else:
+                    tmp.join(l)
+            temp_steps.append(tmp) # last word in a reference doesn't have a "." so we add it manually
+            return temp_steps
+
+        steps = create_steps(self.color_reference)
+        path = self
+        for i in range(len(steps)):
+            path = self[steps[i]]
+        return path
 
 def resolve_color_references(data: dict):
-    pass
+    return
+    for el in data:
+        if isinstance(el, dict): 
+            resolve_color_references(el)
+        elif isinstance(el, ColorReference):
+            el = el.resolve(schema)
 
 def deep_merge(base: dict, overrides: dict):
-    resolve_color_references(base)
-    resolve_color_references(overrides)
     for field in base:
         if field in overrides:
             if isinstance(base[field], dict) and isinstance(overrides[field], dict):
                 deep_merge(base[field], overrides[field])
             elif isinstance(base[field], ColorReference) and isinstance(overrides[field], dict):
-                pass
-                ColorReferenceWithPartOverride.new()
+                ColorReferenceWithPartOverride(base[field], overrides[field])
             else:
                 base[field] = overrides[field]
 
@@ -189,7 +212,7 @@ class Theme():
             user_defaults = {}
             if user_defaults_path.exists():
                 user_defaults = load_jsonc_noreq(user_defaults_path)
-            recursive_normalization(user_defaults, schema, schema)
+                recursive_normalization(user_defaults, schema, schema)
 
             selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
             selected_theme = load_jsonc_req(selected_theme_path)
@@ -199,7 +222,7 @@ class Theme():
             user_overrides = {}
             if user_overrides_path.exists():
                 user_overrides = load_jsonc_noreq(user_overrides_path)
-            recursive_normalization(user_overrides, schema, schema)
+                recursive_normalization(user_overrides, schema, schema)
 
             return cls()
 
