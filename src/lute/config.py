@@ -3,7 +3,7 @@ from pathlib import Path
 from importlib.resources import files, as_file
 import json5 as json
 from dataclasses import dataclass
-
+import re
 
 def xdg_config_home() -> Path:
     """Return $XDG_CONFIG_HOME or the default ~/.config."""
@@ -38,10 +38,36 @@ class Config():
     def load(cls) -> "Config":
         loaded = load_config()
         return cls(
-            lute_dir = LUTE_DIR
-            themes_dir = THEMES_DIR
+            lute_dir = LUTE_DIR,
+            themes_dir = THEMES_DIR,
 
             selected_theme = loaded["selected_theme"],
             ez_mode = loaded["ez_mode"]
                 )
+
+    def select_theme(self, theme_name: str):
+        with CONFIG_FILE.open("r", encoding="utf-8", newline="") as file:
+            text = file.read()
+
+        pattern = re.compile(
+            r'^([ \t]*"selected_theme"[ \t]*:[ \t]*)'
+            r'"(?:\\.|[^"\\])*"',
+            re.MULTILINE,
+        )
+
+        matches = list(pattern.finditer(text))
+
+        if len(matches) != 1:
+            raise ValueError(
+                f"Expected one selected_theme field, found {len(matches)}"
+            )
+
+        match = matches[0]
+        new_value = json.dumps(theme_name, ensure_ascii=False)
+
+        # Keep the field name and spacing; replace only its quoted value.
+        updated = text[:match.end(1)] + new_value + text[match.end():]
+
+        with CONFIG_FILE.open("w", encoding="utf-8", newline="") as file:
+            file.write(updated)
 

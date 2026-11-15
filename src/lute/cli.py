@@ -2,16 +2,30 @@ import sys
 from warnings import filterwarnings, resetwarnings
 from pathlib import Path
 from rich import print
+from lute.config import Config
+from lute.theme import Theme
+
+config = 0
 
 def main():
+    global config
     config_path = Path()
     themes_path = config_path / "themes"
+    config = Config.load()
+    argv = sys.argv
+    argc = len(argv)
     # 'lute list' to list all available/installed themes
-    if len(sys.argv) == 1:
+    if argc == 1:
         print("type [green]'lute help'[/green] for help")
         return
-    if sys.argv[1] == "help":
+    if argv[1] == "help":
         lute_help()
+        return
+    if argv[1] == "set" and argc == 3:
+        lute_set(argv[2])
+
+    if argv[1] == "list" and argv[2] == "themes":
+        lute_list_themes()
         return
 
 
@@ -57,7 +71,7 @@ def lute_help():
 """)
 
 
-def list_themes():
+def lute_list_themes():
     """List installed themes and basic info about them in a table with:
     Name, Main color, Description, Preview screenshot, Tags (need to
     define those later) (Spacious, Compact, Orange, Pink, Pastel,
@@ -66,7 +80,7 @@ def list_themes():
     pass
 
 
-def set_theme(theme_name, light_mode=False, dark_mode=False):
+def lute_set(theme_name, light_mode=False, dark_mode=False):
     """Set theme to theme_name.jsonc. This implies:
         1. for each supported app, export a 'lute_values.extension' file,
            where extension can be anything from lua (Hyprland) to json
@@ -78,10 +92,14 @@ def set_theme(theme_name, light_mode=False, dark_mode=False):
     the desktop. "Which mode to use" is 'calculated' by luted, "SWITCH TO
     DARK MODE NOW" is lute's work.
     """
-    pass
+    global config
+    print(r"Loading [yellow]" + theme_name + r".jsonc[white] ...")
+    config.select_theme(theme_name)
+    theme = Theme.load()
+    print(r"[white]Done!~ [green]" + theme.metadata.name + r"[white] loaded successfully! :3")
+    print(theme)
 
-
-def darken():
+def lute_darken():
     """Change the variant of the theme to its darker version (indicated
     in metadata by "darker-ver" and/or "darkest-ver"). Most themes will
     have a binary dark/light system, but some (like Catppuccin or my own
@@ -90,7 +108,7 @@ def darken():
     pass
 
 
-def lighten():
+def lute_lighten():
     """Change the variant of the theme to its lighter version (indicated
     in metadata by "lightest-ver" and/or "lighter-ver"). Most themes will
     have a binary dark/light system, but some (like Catppuccin or my own
@@ -99,17 +117,17 @@ def lighten():
     pass
 
 
-def dark():
+def lute_dark():
     """Switch the theme to its dark variant."""
     pass
 
 
-def light():
+def lute_light():
     """Switch the theme to its light variant."""
     pass
 
 
-def refresh(app=None):
+def lute_refresh(app=None):
     """Relaunch "refresh"-type commands, like `hyprctl reload`.
 
     The `app` argument allows refreshing a specific app, e.g.
@@ -118,7 +136,7 @@ def refresh(app=None):
     pass
 
 
-def try_theme(theme_name):
+def lute_try(theme_name):
     """Try on a theme. Doesn't do the deepest integration level, does
     just the most obvious things, and `lute stop` makes it go back to
     as it was.
@@ -132,7 +150,7 @@ def try_theme(theme_name):
     pass
 
 
-def apps():
+def lute_list_apps():
     """List supported apps, in a table with columns:
         1. Supported app name
         2. App present / absent
@@ -143,14 +161,14 @@ def apps():
     pass
 
 
-def plug(app):
+def lute_plug(app):
     """Show user step-by-step tutorial on how to use lute in the `app`
     of their choice.
     """
     pass
 
 
-def config():
+def lute_config():
     """TUI to change lute's own options, such as "wm managed by lute"
     to toggle options such as "border width", "corner radius", "gaps",
     etc.
@@ -160,14 +178,14 @@ def config():
     pass
 
 
-def new():
+def lute_new():
     """Start the theme creation wizard to create your own theme (very
     basic. Advanced themes require manual tinkering with the jsonc file).
     """
     pass
 
 
-def install(theme_or_url):
+def lute_install(theme_or_url):
     """If given a theme name, will try to find a theme with this name
     in LUTE's official repo and install it.
 

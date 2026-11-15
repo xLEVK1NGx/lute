@@ -1,8 +1,13 @@
-from lute.config import *
-from importlib.resources import files, as_file
+import colorsys
+from copy import deepcopy
 from dataclasses import *
-from jsonschema import validate, Draft202012Validator
+from enum import Enum
+from importlib.resources import files, as_file
 import json5 as json
+from jsonschema import validate, Draft202012Validator
+from lute.config import *
+from pathlib import Path
+import re
 
 config = Config.load()
 
@@ -111,11 +116,15 @@ def recursive_normalization(value, field_schema, schema):
 
     return value
 
+class GenerateTone(Enum):
+    DARK = "dark"
+    LIGHT = "light"
+
 def normalize_color_variants(value):
     if isinstance(value, str):
         if not value.startswith("#"):
             return value
-        return {"light": value, "base": value, "dark": value}
+        return {"light": GenerateTone.LIGHT, "base": value, "dark": GenerateTone.DARK}
     return value
 
 def normalize_corner_radius(value):
@@ -148,57 +157,339 @@ def normalize_spacing_scale(value):
         return {"sm": value, "md": value, "lg": value}
     return value
 
-# merging layers
-
-@dataclass
-class ColorReferenceWithPartOverride():
-    base: ColorReference# base color reference e.g. border = "palette.red"
-    overrides: dict     # dict of overrides for the specific field, e.g. border = {"light": "#ff9999"}
+# merging layers and resolving color references
 
 @dataclass
 class ColorReference():
     color_reference: str
-    steps: list
-    def resolve(self, schema: dict): # returns the actual theme of that reference
-        def create_steps(ref: str):
-            # sep str into steps (1.2.3.4...)
-            temp_steps = []
-            tmp = ""
-            for l in ref:
-                if l == ".":
-                    temp_steps.append(tmp)
-                    tmp = ""
-                else:
-                    tmp.join(l)
-            temp_steps.append(tmp) # last word in a reference doesn't have a "." so we add it manually
-            return temp_steps
-
-        steps = create_steps(self.color_reference)
-        path = self
-        for i in range(len(steps)):
-            path = self[steps[i]]
+    def resolve(self, theme_dict: dict): # returns the actual theme of that reference
+        steps = self.color_reference.split(".")
+        path = theme_dict
+        for step in steps:
+            path = path[step]
         return path
 
-def resolve_color_references(data: dict):
-    return
-    for el in data:
-        if isinstance(el, dict): 
-            resolve_color_references(el)
-        elif isinstance(el, ColorReference):
-            el = el.resolve(schema)
-
-def deep_merge(base: dict, overrides: dict):
-    for field in base:
-        if field in overrides:
-            if isinstance(base[field], dict) and isinstance(overrides[field], dict):
-                deep_merge(base[field], overrides[field])
-            elif isinstance(base[field], ColorReference) and isinstance(overrides[field], dict):
-                ColorReferenceWithPartOverride(base[field], overrides[field])
-            else:
-                base[field] = overrides[field]
-
 @dataclass
-class Theme():
+class ColorReferenceWithPartOverride():
+    base: ColorReference    # base color reference e.g. border = "palette.red"
+    overrides: dict         # dict of overrides for the specific field, e.g. border = {"light": "#ff9999"}
+
+def convert_strs_to_color_refs(data: dict) -> dict: # func written by AI
+    """Return a copy of data with color-reference strings wrapped."""
+    reference_pattern = re.compile(
+        r"(?:palette|UI|semantic|terminal)(?:\.[A-Za-z0-9_]+)+"
+    )
+    def convert(value):
+        if isinstance(value, dict):
+            return {
+                key: convert(child)
+                for key, child in value.items()
+            }
+        if isinstance(value, list):
+            return [convert(item) for item in value]
+        if isinstance(value, str) and reference_pattern.fullmatch(value):
+            return ColorReference(value)
+        return value
+    return convert(data)
+
+def deep_merge(base: dict, overrides_dict: dict):
+    final = deepcopy(base)
+    overrides = deepcopy(overrides_dict)
+    for field in overrides:
+        if field not in base:
+            final[field] = overrides[field]
+        else:
+            if isinstance(base[field], dict) and isinstance(overrides[field], dict):
+                final[field] = deep_merge(base[field], overrides[field])
+            elif (
+                    isinstance(base[field], (ColorReference, ColorReferenceWithPartOverride))
+                    and isinstance(overrides[field], dict)
+                    and {"base", "dark", "light"} <= overrides[field].keys()
+                ):    
+                # A complete color replaces the earlier reference.
+                final[field] = overrides[field]
+            elif isinstance(base[field], ColorReference) and isinstance(overrides[field], dict):
+                final[field] = ColorReferenceWithPartOverride(base[field], overrides[field])
+            elif isinstance(base[field], ColorReferenceWithPartOverride) and isinstance(overrides[field], dict):
+                final[field] = ColorReferenceWithPartOverride(
+                        base[field].base,
+                        deep_merge(base[field].overrides, overrides[field])
+                        )
+            else:
+                final[field] = overrides[field]
+    return final
+
+def resolve_color_references(theme: dict, schema: dict) -> dict:  # func written by AI
+    """
+    Resolve color references and generate missing color variants.
+
+    Reference paths are relative to theme["colors"].
+    Returns a new dictionary.
+    """
+
+    colors = theme["colors"]
+    colors_schema = schema["properties"]["colors"]
+
+    def follow_schema_refs(field_schema):
+        """Follow local schema references."""
+        while "$ref" in field_schema:
+            field_schema = resolve(field_schema["$ref"], schema)
+        return field_schema
+
+    def is_color_variants(field_schema):
+        field_schema = follow_schema_refs(field_schema)
+        return field_schema.get("x-lute-normalize") == "color_variants"
+
+    def object_schema(field_schema):
+        """Find the schema containing an object's properties."""
+        field_schema = follow_schema_refs(field_schema)
+
+        if "oneOf" in field_schema:
+            for branch in field_schema["oneOf"]:
+                branch = follow_schema_refs(branch)
+
+                if branch.get("type") == "object":
+                    return branch
+
+            raise ValueError("No object branch found in schema")
+
+        return field_schema
+
+    def child_schema(field_schema, key):
+        field_schema = object_schema(field_schema)
+        return field_schema["properties"][key]
+
+    def resolve_reference(reference, active):
+        path = reference.color_reference
+
+        if path in active:
+            chain = " -> ".join((*active, path))
+            raise ValueError(f"Circular color reference: {chain}")
+
+        active = (*active, path)
+        current = colors
+        current_schema = colors_schema
+        parent = None
+        parent_schema = None
+
+        for step in path.split("."):
+            if (
+                isinstance(current, ColorReferenceWithPartOverride)
+                and step in current.overrides
+                and not isinstance(current.overrides[step], (dict, GenerateTone))
+            ):
+                parent = current.overrides
+                parent_schema = current_schema
+                current = current.overrides[step]
+                current_schema = child_schema(current_schema, step)
+                continue
+            # A reference may appear in the middle of another path.
+            if isinstance(
+                current,
+                (ColorReference, ColorReferenceWithPartOverride),
+            ):
+                current = resolve_value(
+                    current,
+                    current_schema,
+                    active,
+                    parent,
+                    parent_schema,
+                )
+
+            if not isinstance(current, dict):
+                raise ValueError(
+                    f"Cannot follow {path!r}: "
+                    f"the value before {step!r} is not an object"
+                )
+
+            # A missing dark/light variant can be generated on demand.
+            if step not in current:
+                if (
+                    is_color_variants(current_schema)
+                    and step in ("dark", "light")
+                    and "base" in current
+                ):
+                    base_schema = child_schema(current_schema, "base")
+                    base = resolve_value(
+                        current["base"],
+                        base_schema,
+                        active,
+                        current,
+                        current_schema,
+                    )
+
+                    adjustment = -0.1 if step == "dark" else 0.1
+                    return generate_tone(base, adjustment)
+
+                raise ValueError(
+                    f"Color reference {path!r} has no field {step!r}"
+                )
+
+            parent = current
+            parent_schema = current_schema
+            current = current[step]
+            current_schema = child_schema(current_schema, step)
+
+        return resolve_value(
+            current,
+            current_schema,
+            active,
+            parent,
+            parent_schema,
+        )
+
+    def resolve_value(
+        value,
+        field_schema,
+        active,
+        parent=None,
+        parent_schema=None,
+    ):
+        # A tone marker needs the final base of its parent color.
+        if isinstance(value, GenerateTone):
+            if parent is None or "base" not in parent:
+                raise ValueError("Cannot generate a tone without a base color")
+
+            base_schema = child_schema(parent_schema, "base")
+            base = resolve_value(
+                parent["base"],
+                base_schema,
+                active,
+                parent,
+                parent_schema,
+            )
+
+            adjustment = -0.1 if value is GenerateTone.DARK else 0.1
+            return generate_tone(base, adjustment)
+
+        if isinstance(value, ColorReference):
+            resolved = resolve_reference(value, active)
+
+            # A single-color reference used in a variant field becomes
+            # a color object whose dark and light tones are generated.
+            if is_color_variants(field_schema) and isinstance(resolved, str):
+                resolved = {
+                    "base": resolved,
+                    "dark": GenerateTone.DARK,
+                    "light": GenerateTone.LIGHT,
+                }
+
+                return resolve_value(resolved, field_schema, active)
+
+            return resolved
+
+        if isinstance(value, ColorReferenceWithPartOverride):
+            base = resolve_reference(value.base, active)
+
+            if not isinstance(base, dict):
+                raise ValueError(
+                    f"Cannot apply partial overrides to "
+                    f"{value.base.color_reference!r}: "
+                    f"it did not resolve to an object"
+                )
+
+            combined = deep_merge(base, value.overrides)
+            return resolve_value(combined, field_schema, active)
+
+        if isinstance(value, dict):
+            result = {}
+
+            for key, child in value.items():
+                result[key] = resolve_value(
+                    child,
+                    child_schema(field_schema, key),
+                    active,
+                    value,
+                    field_schema,
+                )
+
+            # Finalize variants that remain absent after merging.
+            if is_color_variants(field_schema):
+                if "base" not in result:
+                    raise ValueError(
+                        "Cannot finalize a color without a base value"
+                    )
+
+                if "dark" not in result:
+                    result["dark"] = generate_tone(result["base"], -0.1)
+
+                if "light" not in result:
+                    result["light"] = generate_tone(result["base"], 0.1)
+
+            return result
+
+        if isinstance(value, list):
+            field_schema = follow_schema_refs(field_schema)
+            item_schema = field_schema.get("items")
+
+            if item_schema is None and "oneOf" in field_schema:
+                for branch in field_schema["oneOf"]:
+                    branch = follow_schema_refs(branch)
+
+                    if branch.get("type") == "array":
+                        item_schema = branch.get("items")
+                        break
+
+            if item_schema is None:
+                raise ValueError("No item schema found for list")
+
+            return [
+                resolve_value(item, item_schema, active)
+                for item in value
+            ]
+
+        return value
+
+    return resolve_value(theme, schema, ())
+
+# finally, some more color shit.
+
+def generate_tone(color: str, adjustment: float) -> str: # func made by ai cos im lazy
+    """Adjust a hex color's HSV value; preserve alpha if present."""
+
+    hex_digits = color.removeprefix("#")
+
+    # Expand #RGB and #RGBA into #RRGGBB and #RRGGBBAA.
+    if len(hex_digits) in (3, 4):
+        hex_digits = "".join(char * 2 for char in hex_digits)
+
+    rgb = hex_digits[:6]
+    alpha = hex_digits[6:]  # Empty if there is no alpha.
+
+    red = int(rgb[0:2], 16) / 255
+    green = int(rgb[2:4], 16) / 255
+    blue = int(rgb[4:6], 16) / 255
+
+    hue, saturation, value = colorsys.rgb_to_hsv(red, green, blue)
+
+    value = max(0.0, min(1.0, value + adjustment))
+
+    red, green, blue = colorsys.hsv_to_rgb(hue, saturation, value)
+
+    return (
+        f"#{round(red * 255):02x}"
+        f"{round(green * 255):02x}"
+        f"{round(blue * 255):02x}"
+        f"{alpha}"
+    )
+
+
+class ThemeNode:
+    def __init__(self, data: dict):
+        for key, value in data.items():
+            setattr(self, key, self.convert(value))
+
+    @classmethod
+    def convert(cls, value):
+        if isinstance(value, dict):
+            return ThemeNode(value)
+
+        if isinstance(value, list):
+            return [cls.convert(item) for item in value]
+
+        return value
+
+class Theme(ThemeNode):
     @classmethod
     def load(cls) -> "Theme":
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
@@ -207,24 +498,32 @@ class Theme():
             defaults_path = files("lute").joinpath("defaults.jsonc")
             defaults = load_jsonc_noreq(defaults_path)
             recursive_normalization(defaults, schema, schema)
+            defaults = convert_strs_to_color_refs(defaults)
 
             user_defaults_path = config.lute_dir / "user_defaults.jsonc"
             user_defaults = {}
             if user_defaults_path.exists():
                 user_defaults = load_jsonc_noreq(user_defaults_path)
                 recursive_normalization(user_defaults, schema, schema)
+                user_defaults = convert_strs_to_color_refs(user_defaults)
 
             selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
             selected_theme = load_jsonc_req(selected_theme_path)
             recursive_normalization(selected_theme, schema, schema)
+            selected_theme = convert_strs_to_color_refs(selected_theme)
 
             user_overrides_path = config.lute_dir / "user_overrides.jsonc"
             user_overrides = {}
             if user_overrides_path.exists():
                 user_overrides = load_jsonc_noreq(user_overrides_path)
                 recursive_normalization(user_overrides, schema, schema)
+                user_overrides = convert_strs_to_color_refs(user_overrides)
 
-            return cls()
+            final_dict = deep_merge(defaults, user_defaults)
+            final_dict = deep_merge(final_dict, selected_theme)
+            final_dict = deep_merge(final_dict, user_overrides)
 
-        # load each layer DONE → normalize each layer DONE → deep-merge in order → resolve references → create Theme
+            final_dict = resolve_color_references(final_dict, schema)
+
+            return cls(final_dict)
 

@@ -1,618 +1,154 @@
-// this is lute's default theme. has to be something neutral.
 {
-	// JSON Schema reference (this will never change from the github one lol)
-	"$schema": "",
+    // LUTE bundled defaults. Later layers override these values.
+    // Theme-specific metadata and variant links are intentionally omitted.
+    "colors": {
+        "palette": {
+            "black": "#000000",
+            "white": "#ffffff",
+            "gray": "#707070",
+            "red": "#e7024e",
+            "orange": "#ff812e",
+            "yellow": "#e5e34f",
+            "green": "#05e06f",
+            "cyan": "#01dbdb",
+            "blue": "#3838ff",
+            "purple": "#a855ff",
+            "pink": "#ec4cc6"
+        },
+        "UI": {
+            "background": "palette.black",
+            "surface": "palette.gray.dark",
+            "foreground": "palette.white",
+            "accent": "palette.orange",
+            "accent_alt": "palette.orange.dark",
+            "selection": "palette.orange",
+            "hover": "palette.gray",
+            "overlay": "palette.black",
+            "text": {
+                "base": "UI.foreground",
+                "muted": "palette.gray",
+                "disabled": "palette.gray.dark",
+                "inverse": "UI.background"
+            },
+            "border": {
+                "base": "palette.gray.dark",
+                "focused": "UI.accent"
+            }
+        },
+        "semantic": {
+            "info": "palette.blue.base",
+            "warning": "palette.yellow.base",
+            "error": "palette.red.base",
+            "success": "palette.green.base",
+            "feedback": "palette.gray.light"
+        },
+        "terminal": {
+            // Default indexed ANSI mapping; later layers can override slots.
+            "ansi": {
+                "0": "palette.black",
+                "1": "palette.red.base",
+                "2": "palette.green.base",
+                "3": "palette.yellow.base",
+                "4": "palette.blue.base",
+                "5": "palette.pink.base",
+                "6": "palette.cyan.base",
+                "7": "palette.gray.light",
+                "8": "palette.gray.base",
+                "9": "palette.red.light",
+                "10": "palette.green.light",
+                "11": "palette.yellow.light",
+                "12": "palette.blue.light",
+                "13": "palette.pink.light",
+                "14": "palette.cyan.light",
+                "15": "palette.white"
+            },
+            "foreground": "UI.foreground.base",
+            "background": "UI.background.base",
+            "cursor": "UI.foreground.base",
+            "cursor_text": "UI.background.base",
+            "url": "UI.accent.base",
+            "selection": {
+                "background": "UI.selection.base",
+                "foreground": "UI.background.base"
+            },
+            "tabs": {
+                "active_background": "UI.accent.base",
+                "active_foreground": "UI.background.base",
+                "inactive_background": "UI.surface.base",
+                "inactive_foreground": "UI.foreground.base"
+            }
+        }
+    },
 
-	// Metadata about the theme 
-	"metadata": {
-		// name of the theme
-		"name": "",
+    "geometry": {
+        "corner_shape": "round",
+        "corner_radius": 8,
+        "border_width": 1,
+        "gaps": 4
+    },
+    "spacing": {
+        "padding": { "sm": 4, "md": 8, "lg": 16 },
+        "margin": { "sm": 4, "md": 8, "lg": 16 }
+    },
+    "fonts": {
+        "sizes": { "min": 10, "base": 12, "max": 18 },
+        "normal": { "family": "sans-serif", "style": "normal" },
+        "serif": { "family": "serif", "style": "normal" },
+        "monospace": { "family": "monospace", "style": "normal" },
+        "title": { "family": "sans-serif", "style": "normal" },
+        "small": { "family": "sans-serif", "style": "normal" }
+    },
 
-		// Optional freeform description
-		"description": "",
-
-		// list of theme authors
-		"authors": [],
-
-		// theme version (semver)
-		"version": "0.0.0",
-
-		// minimum lute version this theme requires
-		"lute_version": "0.0.0",
-	"color_versions":
-		// "dark" or "light"
-		"variant": "dark",
-	
-	// extra data to allow themes with multiple levels (e.g. Catpuccin)
-	"darkest": "",
-	"darker": "",
-	"lighter": "",
-	"lightest": ""
-	},
-
-	// Colors
-	"colors": {
-
-		// named palette of raw color values for commonly used colors. UI and
-	// semantic tokens can reference these.
-	// each color has a "base" variant, but can also have a "dark" and
-	// "light" one, except black and white. 
-	// "color": "#xxxxxx" is the same as "color": {"base": "#xxxxxx"}.
-
-		"palette": {
-			"black": "#000000",
-			"white": "#ffffff",
-			"gray": {
-				"base": "#808080",
-				"dark": "#404040",
-				"light": "#c0c0c0"
-			},
-			"red": {
-				"base": "#ff0000",
-				"dark": "#990000",
-				"light": "#ff6666"
-		}, 
-			"green": {
-				"base": "#00ff00",
-				"dark": "#009900",
-				"light": "#66ff66"
-			},
-			"cyan": {
-				"base": "#00ffff",
-				"dark": "#009999",
-				"light": "#66ffff"
-			},
-			"blue": {
-				"base": "#0000ff",
-				"dark": "#000099",
-				"light": "#6666ff"
-			},
-			"purple": {
-				"base": "#8800ff",
-				"dark": "#550099",
-				"light": "#aa66ff"
-			},
-			"pink": {
-				"base": "#ff00ff",
-				"dark": "#990099",
-				"light": "#ff66ff"
-			}
-		},
-
-		// UI stuff
-	// Semantic surface/element colors. Values can be hex strings,
-		// { base, dark, light } objects, or references like
-		// "palette.gray.dark".
-		"UI": {
-			// Primary background (e.g. window fill)
-			"background": {
-				"base": "#1a1a1a",
-				"dark": "#0d0d0d",
-				"light": "#2a2a2a"
-			},
-			// Elevated surface (e.g. cards, sidebars, panels)
-			"surface": {
-				"base": "#252525",
-				"dark": "#1a1a1a",
-				"light": "#333333"
-			},
-			// Primary text / foreground
-			"foreground": {
-				"base": "#dddddd",
-				"dark": "#aaaaaa",
-				"light": "#ffffff"
-			},
-			// Primary accent color
-			"accent": {
-				"base": "#ff812e",
-				"dark": "#cc6624",
-				"light": "#ffa060"
-			},
-			// Secondary accent color
-			"accent_alt": {
-				"base": "#f94e15",
-				"dark": "#c73e10",
-				"light": "#fb7a50"
-			},
-			// Selected text / items
-			"selection": {
-				"base": "#3a3a5c",
-				"dark": "#2a2a44",
-				"light": "#4a4a6e"
-			},
-			// Hover highlight
-			"hover": {
-				"base": "#333333",
-				"dark": "#2a2a2a",
-				"light": "#444444"
-			},
-			// Popups, dropdowns, floating layers
-			"overlay": {
-				"base": "#2a2a2a",
-				"dark": "#1a1a1a",
-				"light": "#3a3a3a"
-			},
-
-			// ── Text variants ───────────────────────────────────────────
-			"text": {
-				// Normal readable text
-				"base": {
-					"base": "#dddddd",
-					"dark": "#aaaaaa",
-					"light": "#ffffff"
-				},
-				// Subdued / secondary text
-				"muted": {
-					"base": "#888888",
-					"dark": "#666666",
-					"light": "#aaaaaa"
-				},
-				// Greyed-out / non-interactive text
-				"disabled": {
-					"base": "#555555",
-					"dark": "#333333",
-					"light": "#777777"
-				},
-				// Text on accent / colored backgrounds
-				"inverse": {
-					"base": "#000000",
-					"dark": "#000000",
-					"light": "#1a1a1a"
-				}
-			},
-
-			// ── Border variants ─────────────────────────────────────────
-			"border": {
-				// Default border color
-				"base": {
-					"base": "#333333",
-					"dark": "#222222",
-					"light": "#444444"
-				},
-				// Active / focused window border
-				"focused": {
-					"base": "#ff812e",
-					"dark": "#cc6624",
-					"light": "#ffa060"
-				}
-			}
-		},
-
-		// ── Semantic Feedback Colors ────────────────────────────────────
-		// Status / feedback colors. All five are required in themes.
-		"semantic": {
-			// Informational messages, links
-			"info": {
-				"base": "#0088ff",
-				"dark": "#0066cc",
-				"light": "#44aaff"
-			},
-			// Warnings, caution states
-			"warning": {
-				"base": "#ffaa00",
-				"dark": "#cc8800",
-				"light": "#ffcc44"
-			},
-			// Errors, destructive actions
-			"error": {
-				"base": "#ff0044",
-				"dark": "#cc0033",
-				"light": "#ff4477"
-			},
-			// Success, confirmations
-			"success": {
-				"base": "#00cc66",
-				"dark": "#009944",
-				"light": "#44ee88"
-			},
-			// Neutral status feedback ("launched", "copied", etc.)
-			"feedback": {
-				"base": "#888888",
-				"dark": "#666666",
-				"light": "#aaaaaa"
-			}
-		},
-
-		// ── Terminal Colors ─────────────────────────────────────────────
-		// Only "ansi" is required. Everything else defaults to UI
-		// equivalents if omitted in a theme.
-		"terminal": {
-			// ANSI 0-15. Supports EITHER named { color: { base, bright } }
-			// OR indexed { "0": "#...", "1": "#...", ... "15": "#..." }.
-			// Using named format here for defaults:
-			"ansi": {
-				"black": {
-					"base": "#000000",
-					"bright": "#707070"
-				},
-				"red": {
-					"base": "#cc0000",
-					"bright": "#ff0000"
-				},
-				"green": {
-					"base": "#00cc00",
-					"bright": "#00ff00"
-				},
-				"yellow": {
-					"base": "#cccc00",
-					"bright": "#ffff00"
-				},
-				"blue": {
-					"base": "#0000cc",
-					"bright": "#0000ff"
-				},
-				"magenta": {
-					"base": "#cc00cc",
-					"bright": "#ff00ff"
-				},
-				"cyan": {
-					"base": "#00cccc",
-					"bright": "#00ffff"
-				},
-				"white": {
-					"base": "#dddddd",
-					"bright": "#ffffff"
-				}
-			},
-
-			// Terminal foreground (defaults to UI.foreground.base)
-			"foreground": "",
-			// Terminal background (defaults to UI.background.base)
-			"background": "",
-			// Cursor block/beam color
-			"cursor": "",
-			// Text color under the cursor
-			"cursor_text": "",
-
-			// Terminal selection colors
-			"selection": {
-				// Selection background (defaults to UI.selection.base)
-				"background": "",
-				// Selection foreground (defaults to UI.foreground.base)
-				"foreground": ""
-			},
-
-			// URL / hyperlink color
-			"url": "",
-
-			// Tab bar colors (for terminals with built-in tabs, e.g. Kitty)
-			"tabs": {
-				"active_background": "",
-				"active_foreground": "",
-				"inactive_background": "",
-				"inactive_foreground": ""
-			}
-		}
-	},
-
-	// ── Geometry ────────────────────────────────────────────────────────
-	"geometry": {
-		// Window/element border width in px
-		"border_width": 2,
-		// Corner radius in px (0 = sharp corners)
-		"corner_radius": 8,
-		"corner_type": "round",
-	// Gap size in px. Can be a single int (applied to both inner and
-		// outer) or an object { "inner": int, "outer": int }
-		"gaps": {
-			"inner": 4,
-			"outer": 8
-		},
-
-	// ── Spacing ─────────────────────────────────────────────────────────
-		"spacing": {
-		// Padding in px. Can be a single int or { "sm", "md", "lg" }
-		"padding": {
-			"sm": 4,
-			"md": 8,
-			"lg": 16
-		},
-		// Margin in px. Can be a single int or { "sm", "md", "lg" }
-		"margin": {
-			"sm": 4,
-			"md": 8,
-			"lg": 16
-		}
-		},
-	},
-
-	// ── Fonts ───────────────────────────────────────────────────────────
-	"fonts": {
-		// Global font size bounds
-		"sizes": {
-			"min": 10,
-			"base": 14,
-			"max": 24
-		},
-
-		// Normal / body text
-		"normal": {
-			// Font family name (required per slot)
-			"family": "sans-serif",
-			// "normal", "italic", or "oblique"
-			"style": "normal",
-			// Optional per-slot size override
-			"sizes": {
-				"min": 10,
-				"base": 14,
-				"max": 24
-			}
-		},
-		// Serif text (long-form content, etc.)
-		"serif": {
-			"family": "serif",
-			"style": "normal",
-			"sizes": {
-				"min": 10,
-				"base": 14,
-				"max": 24
-			}
-		},
-		// Monospace text (code, terminal, inline code)
-		"monospace": {
-			"family": "monospace",
-			"style": "normal",
-			"sizes": {
-				"min": 10,
-				"base": 14,
-				"max": 24
-			}
-		},
-		// Titles, headings
-		"title": {
-			"family": "sans-serif",
-			"style": "normal",
-			"sizes": {
-				"min": 18,
-				"base": 24,
-				"max": 48
-			}
-		},
-		// Small text (captions, footnotes, labels)
-		"small": {
-			"family": "sans-serif",
-			"style": "italic",
-			"sizes": {
-				"min": 8,
-				"base": 10,
-				"max": 12
-			}
-		}
-	},
-
-	// ── Effects ─────────────────────────────────────────────────────────
-	// Model C: each effect has a "default" block with base values, plus
-	// a per-scope override system. Scopes are:
-	//   window_bg, window_fg, active_window, inactive_windows, overlay,
-	//   panel, app_icons, interactive, text, wallpaper, full_screen
-	//
-	// Only scopes listed under each effect are valid for that effect.
-	// Omitting a scope means it uses the "default" values. Setting a
-	// scope to { "enabled": false } disables the effect for that scope.
-	"effects": {
-
-		// Background blur (frosted glass behind surfaces)
-		"blur": {
-			"default": {
-				"enabled": false,
-				// Blur radius / intensity
-				"strength": 8,
-				// Number of blur passes (higher = smoother, more expensive)
-				"passes": 2,
-				// Noise mixed into blur to reduce banding
-				"noise": 0.02
-			}
-			// Valid scopes: window_bg, inactive_windows, overlay, panel, wallpaper
-		},
-
-		// Foreground glass overlay (shine / reflection on surfaces)
-		"glass": {
-			"default": {
-				"enabled": false,
-				// Glass blur amount (separate from background blur)
-				"blur": 4,
-				// Tint color applied to the glass
-				"tint": "#ffffff",
-				// Opacity of the tint (0.0 = invisible, 1.0 = opaque)
-				"tint_opacity": 0.1,
-				// Noise texture on the glass surface
-				"noise": 0.03,
-				// Border around the glass element
-				"border": "#ffffff22",
-				// Highlight / specular shine
-				"highlight": {
-					// Whether the highlight is visible
-					"enabled": false,
-					// Highlight color
-					"color": "#ffffff",
-					// Highlight opacity
-					"opacity": 0.1,
-					// "top", "bottom", "left", "right"
-					"position": "top"
-				}
-			}
-			// Valid scopes: panel, overlay, interactive
-		},
-
-		// Transparency / opacity
-		"opacity": {
-			"default": {
-				// 0.0 = fully transparent, 1.0 = fully opaque
-				"value": 1.0
-			}
-			// Valid scopes: active_window, inactive_windows, window_bg, panel
-		},
-
-		// Dim inactive elements
-		"dimming": {
-			"default": {
-				"enabled": false,
-				// Dimming intensity (0.0 = none, 1.0 = fully dimmed)
-				"strength": 0.2
-			}
-			// Valid scopes: inactive_windows
-		},
-
-		// Drop shadows
-		"shadows": {
-			"default": {
-				"enabled": false,
-				// Shadow blur range in px
-				"range": 20,
-				// Horizontal shadow offset in px
-				"offset_x": 0,
-				// Vertical shadow offset in px
-				"offset_y": 4,
-				// Shadow color
-				"color": "#00000088"
-			}
-			// Valid scopes: window_bg, overlay, panel
-		},
-
-		// Pixelation effect
-		"pixelate": {
-			"default": {
-				"enabled": false,
-				// Size of each pixel block in px
-				"block_size": 4
-			}
-			// Valid scopes: full_screen, wallpaper, app_icons
-		},
-
-		// Film grain / noise overlay
-		"noise": {
-			"default": {
-				"enabled": false,
-				// Noise intensity (0.0 = none, 1.0 = heavy)
-				"intensity": 0.05,
-				// Whether the noise pattern animates
-				"animated": false
-			}
-			// Valid scopes: full_screen, overlay
-		},
-
-		// CRT-style scanlines
-		"scanlines": {
-			"default": {
-				"enabled": false,
-				// Scanline opacity (0.0 = invisible, 1.0 = solid)
-				"opacity": 0.1,
-				// Distance between scanlines in px
-				"spacing": 4
-			}
-			// Valid scopes: full_screen
-		},
-
-		// Glow / bloom effect
-		"glow": {
-			"default": {
-				"enabled": false,
-				// Glow color
-				"color": "#ff812e",
-				// Glow spread range in px
-				"range": 10,
-				// Glow brightness (0.0 = none, 1.0 = intense)
-				"intensity": 0.5
-			}
-			// Valid scopes: active_window, window_bg, overlay
-		},
-
-		// RGB fringing / chromatic aberration
-		"chromatic_aberration": {
-			"default": {
-				"enabled": false,
-				// Aberration strength (0.0 = none, 1.0 = heavy)
-				"strength": 0.1
-			}
-			// Valid scopes: full_screen
-		},
-
-		// Edge darkening / vignette
-		"vignette": {
-			"default": {
-				"enabled": false,
-				// Vignette darkness (0.0 = none, 1.0 = heavy)
-				"strength": 0.3,
-				// Radius of the clear center area (0.0-1.0)
-				"radius": 0.8
-			}
-			// Valid scopes: full_screen
-		},
-
-		// Color saturation adjustment
-		"saturation": {
-			"default": {
-				// 0.0 = grayscale, 1.0 = normal, 2.0 = oversaturated
-				"value": 1.0
-			}
-			// Valid scopes: full_screen, wallpaper, inactive_windows
-		},
-
-		// Color tint overlay
-		"tint": {
-			"default": {
-				"enabled": false,
-				// Tint color
-				"color": "#ff812e",
-				// Tint opacity (0.0 = none, 1.0 = solid color)
-				"opacity": 0.1
-			}
-			// Valid scopes: full_screen, wallpaper
-		},
-
-		// Outline / border glow around elements
-		"outline": {
-			"default": {
-				"enabled": false,
-				// Outline color
-				"color": "#ff812e",
-				// Outline width in px
-				"width": 2
-			}
-			// Valid scopes: active_window, inactive_windows
-		}
-	},
-
-	// ── Cursor ──────────────────────────────────────────────────────────
-	"cursor": {
-		// Cursor theme name (e.g. "Bibata-Modern-Classic")
-		"theme": "",
-		// Cursor size in px
-		"size": 24
-	},
-
-	// ── Icons ───────────────────────────────────────────────────────────
-	"icons": {
-		// Icon theme name (e.g. "Papirus-Dark")
-		"theme": ""
-	},
-
-	// ── Widget Themes ───────────────────────────────────────────────────
-	// Controls GTK, Qt, and Kvantum widget styling.
-	// Each entry accepts ONE of:
-	//   - "theme_name": "SomeTheme"	  (use a specific installed theme)
-	//   - "same_as_lute": true		   (auto-generate from lute colors)
-	// Plus optionally:
-	//   - "overrides": { ... }		   (app-specific tweaks on top)
-	"widget_themes": {
-		"gtk": {
-			"theme_name": "",
-			"same_as_lute": false,
-			"overrides": {}
-		},
-		"qt": {
-			"theme_name": "",
-			"same_as_lute": false,
-			"overrides": {}
-		},
-		"kvantum": {
-			"theme_name": "",
-			"same_as_lute": false,
-			"overrides": {}
-		}
-	},
-
-	// ── Wallpaper ───────────────────────────────────────────────────────
-	// Optional path to wallpaper image. Plain string, no modes/blur/etc.
-	"wallpaper": ""
+    // Effect defaults are neutral or disabled. Scope blocks are intentionally
+    // omitted: the current parser does not yet implement scope inheritance.
+    "effects": {
+        "blur": {
+            "default": { "enabled": false, "strength": 0, "passes": 0, "noise": 0 }
+        },
+        "glass": {
+            "default": {
+                "enabled": false,
+                "blur": 0,
+                "tint": "palette.white",
+                "tint_opacity": 0,
+                "noise": 0,
+                "border": false,
+                "highlight": {
+                    "enabled": false,
+                    "color": "palette.white",
+                    "opacity": 0,
+                    "position": "top"
+                }
+            }
+        },
+        "opacity": {
+            "default": { "value": 1 }
+        },
+        "dimming": {
+            "default": { "enabled": false, "strength": 0 }
+        },
+        "shadows": {
+            "default": {
+                "enabled": false,
+                "range": 0,
+                "offset_x": 0,
+                "offset_y": 0,
+                "color": "palette.black"
+            }
+        },
+        "pixelate": {
+            "default": { "enabled": false, "block_size": 1 }
+        },
+        "glow": {
+            "default": {
+                "enabled": false,
+                "color": "UI.accent.base",
+                "range": 0,
+                "intensity": 0
+            }
+        },
+        "saturation": {
+            "default": { "value": 100 }
+        }
+    }
 }
