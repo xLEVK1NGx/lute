@@ -35,6 +35,8 @@ class Config():
     ez_mode: bool
     enabled_plugins: dict[str, bool]
 
+    verbose: bool = False
+
     @classmethod
     def load(cls) -> "Config":
         loaded = load_config()
@@ -72,4 +74,5 @@ class Config():
 
         with CONFIG_FILE.open("w", encoding="utf-8", newline="") as file:
             file.write(updated)
+        self.selected_theme = theme_name
 

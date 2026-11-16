@@ -9,6 +9,8 @@ from lute.config import Config
 from lute.plugins.base import Plugin
 from lute.theme import Theme
 import lute.plugins
+import os
+import subprocess
 
 config = 0
 active_plugins = []
@@ -28,72 +30,102 @@ def main():
     if argc == 1:
         print("type [green]'lute help'[/green] for help")
         return
-    if argv[1] == "help":
+
+    elif argv[1] == "help":
         lute_help()
         return
-    if argv[1] == "set" and argc == 3:
-        lute_set(argv[2])
 
-    if argv[1] == "list" and argv[2] == "themes":
+    elif (argc == 2 and argv[1] == "list") or (argc == 3 and argv[1] == "list" and  argv[2] == "themes"):
+        if argc == 4 and argv[3] == "autocompletion":
+            lute_list_themes(autocompletion=True)
+            return
         lute_list_themes()
-        return
 
+    elif argv[1] == "set":
+        if argc == 3:
+            lute_set(argv[2], verbose=True)
+        else:
+            print("Usage: `lute set theme-name`, without the .jsonc file extension")
 
-
+    elif argv[1] == "lighten":
+        lute_lighten()
+    elif argv[1] == "darken":
+        lute_darken()
+    elif argv[1] == "light":
+        lute_light()
+    elif argv[1] == "dark":
+        lute_dark()
 
 def lute_help():
     """Explain the program's purpose and list commands."""
     print(r"""
-    [green]lute list [/]
-        [default]list installed themes (found in .config/lute/themes/) [/]
+[green]lute list [/]
+    [default]list installed themes (found in .config/lute/themes/) [/]
 
-    [green]lute set \[theme] \[--light-mode / --dark-mode] [/]
-        [default]load the specified theme or set it to be the light-mode / dark-mode theme by default [/]
+[green]lute set \[theme] [/]
+    [default]load the specified theme or set it to be the light-mode / dark-mode theme by default [/]
 
-    [green]lute darken / lute lighten [/]
-        [default]make the theme a lighter or darker shade, for supported themes (e.g. Catpuccin ) [/]
+[green]lute darken / lute lighten [/]
+    [default]make the theme a lighter or darker shade, for supported themes (e.g. Catpuccin ) [/]
 
-    [green]lute dark / lute light [/]
-        [default]switch the theme to light / dark mode [/]
+[green]lute dark / lute light [/]
+    [default]switch the theme to light / dark mode [/]
 
-    [green]lute refresh \[app] [/]
-        [default]refresh all lute-supported apps to apply theme. The [app] argument refreshes a specific app, e.g. hyprland. [/]
+[green]lute refresh \[app] [/]
+    [default]refresh all lute-supported apps to apply theme. The [app] argument refreshes a specific app, e.g. hyprland. [/]
 
-    [green]lute try \[theme] [/]
-        [default]"try on" a theme. is faster than 'set' but potentially has bugs and/or other issues. [/]
+[green]lute try \[theme] [/]
+    [default]"try on" a theme. is faster than 'set' but potentially has bugs and/or other issues. [/]
 
-    [green]lute apps [/] 
-        [default]list all apps supported by lute, and whether they are installed and plugged in [/]
+[green]lute apps [/]
+    [default]list all apps supported by lute, and whether they are installed and plugged in [/]
 
-    [green]lute plug \[app] [/]
-        [default]help with "plugging-in" an app [/]
+[green]lute plug \[app] [/]
+    [default]help with "plugging-in" an app [/]
 
-    [green]lute config [/]
-        [default]change lute's own settings [/]
+[green]lute config [/]
+    [default]change lute's own settings [/]
 
-    [green]lute new [/]
-        [default]start the theme creation wizard to create your own theme (very basic. advanced themes require manual tinkering with the jsonc file.) [/]
+[green]lute new [/]
+    [default]start the theme creation wizard to create your own theme (very basic. advanced themes require manual tinkering with the jsonc file.) [/]
 
-    [green]lute install \[theme / url] [/]
-        [default]if given a theme name, will try to find a theme with this name in LUTE's official repo and install it.
-        if given a url, will install the theme from there. (warning: file MUST be prefixed with 'lute-', for example 'lute-nord.jsonc') [/]
+[green]lute install \[theme / url] [/]
+    [default]if given a theme name, will try to find a theme with this name in LUTE's official repo and install it.
+    if given a url, will install the theme from there. (warning: file MUST be prefixed with 'lute-', for example 'lute-nord.jsonc') [/]
 
 """)
 
 
-def lute_list_themes():
-    """List installed themes and basic info about them in a table with:
-    Name, Main color, Description, Preview screenshot, Tags (need to
-    define those later) (Spacious, Compact, Orange, Pink, Pastel,
-    Vibrant, Calm, Aggressive, Elegant, etc etc etc...).
-    """
-    pass
+def lute_list_themes(want_return = False, autocompletion = False):
+    """List installed themes.
+    TODO: basic info about them in a table with:
+    Name, Description, Main Color, Tags"""
+
+    result = subprocess.run(f"ls {config.themes_dir} | awk -F '.jsonc' '{{print $1}}'", 
+                            shell=True, 
+                            capture_output=True, 
+                            text=True, 
+                            check=True)
+    lst = result.stdout.split("\n")
+    lst.remove('')
+
+    if want_return:
+        return lst
+
+    elif autocompletion:
+        for el in lst:
+            print("[default]" + el + "[/]")
+
+    else:
+        print("[green]=== INSTALLED THEMES ===")
+        for el in lst:
+            print("[default]" + el + "[/]")
 
 
-def lute_set(theme_name, light_mode=False, dark_mode=False):
+def lute_set(theme_name, light_mode=False, dark_mode=False, verbose=False):
     """Set theme to theme_name.jsonc. This implies:
-        1. for each supported app, export a 'lute_values.extension' file,
-           where extension can be anything from lua (Hyprland) to json
+        1. for each supported app, export a 'lute-generated.(some extension)' file,
+           where the extension can be anything from lua (Hyprland) to json
            (FastFetch?) or qml (quickshell)
         2. launch commands to "refresh" said apps, e.g. `hyprctl reload`
            or `qs refresh-config`
@@ -103,8 +135,16 @@ def lute_set(theme_name, light_mode=False, dark_mode=False):
     DARK MODE NOW" is lute's work.
     """
     global config
+    old_theme = config.selected_theme
     config.select_theme(theme_name)
-    print(r"Loading [yellow]" + theme_name + r".jsonc[default] ...")
+    if config.selected_theme in lute_list_themes(want_return=True):
+        print(r"Loading [yellow]" + theme_name + r".jsonc[default]...")
+    else:
+        if verbose:
+            print(r"[red]You don't have this theme installed!")
+        config.select_theme(old_theme)
+        return 1
+
     theme = Theme.load()
 
     plugin_classes = []
@@ -126,7 +166,6 @@ def lute_set(theme_name, light_mode=False, dark_mode=False):
     for plugin in plugins:
         if config.enabled_plugins.get(plugin.name, False) and plugin.detect(): 
             if plugin.is_plugged_in():
-                print(plugin.name + " is active!")
                 if config.ez_mode:
                     print("ez mode is not supported yet")
                     return # remove when ez mode is supported :P
@@ -134,7 +173,8 @@ def lute_set(theme_name, light_mode=False, dark_mode=False):
                     plugin.generate_overrides(theme)
                     plugin.refresh()
                 else:
-                    print(r"[default]Generating values for [yellow]" + plugin.name + r"[default]...")
+                    if verbose:
+                        print(r"[default]Generating values for [yellow]" + plugin.name + r"[default]...")
                     plugin.generate_variables(theme)
                     plugin.refresh()
             else:
@@ -152,8 +192,12 @@ def lute_darken():
     have a binary dark/light system, but some (like Catppuccin or my own
     theme later) can have more levels.
     """
-    pass
-
+    theme = Theme.load()
+    try:
+        theme_to_load = theme.metadata.darker_ver
+        lute_set(theme_to_load)
+    except AttributeError:
+        print("[red]This theme has no darker ver!")
 
 def lute_lighten():
     """Change the variant of the theme to its lighter version (indicated
@@ -161,18 +205,30 @@ def lute_lighten():
     have a binary dark/light system, but some (like Catppuccin or my own
     theme later) can have more levels.
     """
-    pass
-
+    theme = Theme.load()
+    try:
+        theme_to_load = theme.metadata.lighter_ver
+        lute_set(theme_to_load)
+    except AttributeError:
+        print("[red]This theme has no lighter ver!")
 
 def lute_dark():
-    """Switch the theme to its dark variant."""
-    pass
-
+    """Switch the theme to its darkest variant."""
+    theme = Theme.load()
+    try:
+        theme_to_load = theme.metadata.darkest_ver
+        lute_set(theme_to_load)
+    except AttributeError:
+        print("[red]This theme has no dark ver!")
 
 def lute_light():
-    """Switch the theme to its light variant."""
-    pass
-
+    """Switch the theme to its lightest variant."""
+    theme = Theme.load()
+    try:
+        theme_to_load = theme.metadata.lightest_ver
+        lute_set(theme_to_load)
+    except AttributeError:
+        print("[red]This theme has no light ver!")
 
 def lute_refresh(app=None):
     """Relaunch "refresh"-type commands, like `hyprctl reload`.
@@ -240,3 +296,14 @@ def lute_install(theme_or_url):
     MUST be prefixed with "lute-...").
     """
     pass
+
+
+
+
+
+
+# for salut a tous c lasalle in range gtaVI
+
+
+
+

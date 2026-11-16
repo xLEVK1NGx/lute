@@ -1,6 +1,6 @@
 import lute.config as config
 from lute.plugins.base import Plugin
-import os
+import subprocess
 from rich import print
 
 class KittyPlugin(Plugin):
@@ -10,7 +10,7 @@ class KittyPlugin(Plugin):
 
 
     def detect(self) -> bool:
-        if os.system("ls /usr/share/applications/kitty.desktop > /dev/null 2>&1") == 0:
+        if subprocess.run("ls /usr/share/applications/kitty.desktop > /dev/null 2>&1", shell=True).returncode == 0:
             return True
         return False
 
@@ -48,8 +48,11 @@ class KittyPlugin(Plugin):
             lute_generated.write(f"inactive_tab_background {term.tabs.inactive_background}\n")
 
             lute_generated.write("# === FONTS ===\n")
-            lute_generated.write("# nothing here yet :^\n")
-
+            lute_generated.write(f"font_family family='{font.normal.family}'\n")
+            lute_generated.write(f"bold_font family='{font.normal.family}'\n")
+            lute_generated.write(f"italic_font family='{font.normal.family}'\n")
+            lute_generated.write(f"bold_italic_font family='{font.normal.family}'\n")
+            lute_generated.write(f"font_size {font.normal.sizes.base}\n")
 
 
 
@@ -57,7 +60,7 @@ class KittyPlugin(Plugin):
         raise NotImplementedError
 
     def refresh(self) -> None:
-        os.system("kill -USR1 $(pidof kitty) > /dev/null 2>&1")
+        subprocess.run("kill -USR1 $(pidof kitty) > /dev/null 2>&1", shell=True)
 
     def help_install(self, ez_mode) -> None:
         if ez_mode:

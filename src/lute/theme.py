@@ -8,6 +8,8 @@ from jsonschema import validate, Draft202012Validator
 from lute.config import *
 from pathlib import Path
 import re
+from rich import print
+import subprocess
 
 # functions to load jsonc files and such
 
@@ -94,6 +96,8 @@ def recursive_normalization(value, field_schema, schema):
                 value = normalize_side_values(value)
             case "spacing_scale":
                 value = normalize_spacing_scale(value)
+            case "font_sizes":
+                value = normalize_font_sizes(value)
 
     if "oneOf" in field_schema:
         for branch in field_schema["oneOf"]:
@@ -107,7 +111,9 @@ def recursive_normalization(value, field_schema, schema):
 
     if isinstance(value, dict):
         for field in value:
-            value[field] = recursive_normalization(value[field], field_schema["properties"][field], schema)
+            value[field] = recursive_normalization(value[field],
+                                                   field_schema["properties"][field],
+                                                   schema)
     elif isinstance(value, list):
         for index in range(len(value)): 
             value[index] = recursive_normalization(value[index], field_schema["items"], schema)
@@ -154,6 +160,37 @@ def normalize_spacing_scale(value):
     if isinstance(value, int):
         return {"sm": value, "md": value, "lg": value}
     return value
+
+def normalize_font_sizes(fonts: dict) -> dict:
+    if "sizes" not in fonts:
+        return fonts
+
+    for slot_name in ("normal", "serif", "monospace", "title", "small"):
+        if slot_name in fonts:
+            fonts[slot_name].setdefault("sizes", fonts["sizes"].copy())
+
+    return fonts
+
+# fonts validation
+def validate_fonts(data: dict):
+    config = Config.load()
+    if "fonts" not in data:
+        return
+    shell_result = subprocess.run("fc-list | awk -F ': '  '{print $2}' | awk -F ':' '{print $1}'",
+                                  shell=True,
+                                  capture_output=True,
+                                  text=True,
+                                  check=True)
+    fc_listed_fonts = shell_result.stdout.split("\n")
+    conf_used_fonts = [(name, font) for name, font in data["fonts"].items() if name != "sizes"]
+    for name, font in conf_used_fonts:
+        if font["family"] in fc_listed_fonts:
+            if config.verbose:
+                print(f"Font {font['family']} found!")
+            continue
+        else:
+            print(f"[bold red]Font {font['family']} not found! Not gonna load it...")
+            del data["fonts"][name]
 
 # merging layers and resolving color references
 
@@ -503,11 +540,13 @@ class Theme(ThemeNode):
             user_defaults = {}
             if user_defaults_path.exists():
                 user_defaults = load_jsonc_noreq(user_defaults_path)
+                validate_fonts(user_defaults)
                 recursive_normalization(user_defaults, schema, schema)
                 user_defaults = convert_strs_to_color_refs(user_defaults)
 
             selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
             selected_theme = load_jsonc_req(selected_theme_path)
+            validate_fonts(selected_theme)
             recursive_normalization(selected_theme, schema, schema)
             selected_theme = convert_strs_to_color_refs(selected_theme)
 
@@ -515,6 +554,7 @@ class Theme(ThemeNode):
             user_overrides = {}
             if user_overrides_path.exists():
                 user_overrides = load_jsonc_noreq(user_overrides_path)
+                validate_fonts(user_overrides)
                 recursive_normalization(user_overrides, schema, schema)
                 user_overrides = convert_strs_to_color_refs(user_overrides)
 

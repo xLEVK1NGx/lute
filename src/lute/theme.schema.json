@@ -260,12 +260,12 @@
                             "additionalProperties": false
                         },
                         "background_opacity": {
-                                "type": "number",
-                                "minimum": 0,
-                                "maximum": 1,
-                                "default": 1,
-                                "description": "Terminal background opacity; takes precedence over general opacity. Defaults to 1 when omitted."
-                            }
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1,
+                            "default": 1,
+                            "description": "Terminal background opacity; takes precedence over general opacity. Defaults to 1 when omitted."
+                        }
                     },
                     "additionalProperties": false
                 }
@@ -337,7 +337,25 @@
                     "$ref": "#/$defs/FontSlot"
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "dependentRequired": {
+                "normal": [
+                    "sizes"
+                ],
+                "serif": [
+                    "sizes"
+                ],
+                "monospace": [
+                    "sizes"
+                ],
+                "title": [
+                    "sizes"
+                ],
+                "small": [
+                    "sizes"
+                ]
+            },
+            "x-lute-normalize": "font_sizes"
         },
         "effects": {
             "type": "object",
@@ -644,7 +662,12 @@
                     "exclusiveMinimum": 0
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "required": [
+                "min",
+                "base",
+                "max"
+            ]
         },
         "FontSlot": {
             "type": "object",

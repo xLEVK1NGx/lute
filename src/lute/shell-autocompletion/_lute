@@ -1,0 +1,16 @@
+#compdef lute
+# for zsh
+_lute() {
+	local -a themes
+	local -a commands
+	if (( CURRENT == 2 )); then
+		# The user is typing the command after "lute".
+		commands=("${(@f)$(lute commands)}")
+		_describe 'command' commands
+	elif (( CURRENT == 3 )) && [[ $words[2] == set ]]; then
+		# Ask LUTE for theme names, one per line.
+		themes=("${(@f)$(lute list themes autocompletion)}")
+		_describe 'theme' themes
+	fi
+}
+_lute "$@"
