@@ -258,7 +258,14 @@
                                 }
                             },
                             "additionalProperties": false
-                        }
+                        },
+                        "background_opacity": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 1,
+                                "default": 1,
+                                "description": "Terminal background opacity; takes precedence over general opacity. Defaults to 1 when omitted."
+                            }
                     },
                     "additionalProperties": false
                 }

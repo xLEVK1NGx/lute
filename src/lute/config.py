@@ -33,6 +33,7 @@ class Config():
 
     selected_theme: str
     ez_mode: bool
+    enabled_plugins: dict[str, bool]
 
     @classmethod
     def load(cls) -> "Config":
@@ -42,7 +43,8 @@ class Config():
             themes_dir = THEMES_DIR,
 
             selected_theme = loaded["selected_theme"],
-            ez_mode = loaded["ez_mode"]
+            ez_mode = loaded["ez_mode"],
+            enabled_plugins = loaded["enabled_plugins"]
                 )
 
     def select_theme(self, theme_name: str):
@@ -65,7 +67,7 @@ class Config():
         match = matches[0]
         new_value = json.dumps(theme_name, ensure_ascii=False)
 
-        # Keep the field name and spacing; replace only its quoted value.
+        # keep the field name and spacing
         updated = text[:match.end(1)] + new_value + text[match.end():]
 
         with CONFIG_FILE.open("w", encoding="utf-8", newline="") as file:

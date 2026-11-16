@@ -9,8 +9,6 @@ from lute.config import *
 from pathlib import Path
 import re
 
-config = Config.load()
-
 # functions to load jsonc files and such
 
 def load_jsonc(path) -> dict:
@@ -492,6 +490,7 @@ class ThemeNode:
 class Theme(ThemeNode):
     @classmethod
     def load(cls) -> "Theme":
+        config = Config.load()
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)
 

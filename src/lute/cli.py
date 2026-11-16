@@ -1,17 +1,27 @@
 import sys
 from warnings import filterwarnings, resetwarnings
 from pathlib import Path
+import importlib
+import inspect
+import pkgutil
 from rich import print
 from lute.config import Config
+from lute.plugins.base import Plugin
 from lute.theme import Theme
+import lute.plugins
 
 config = 0
+active_plugins = []
 
 def main():
     global config
     config_path = Path()
     themes_path = config_path / "themes"
     config = Config.load()
+
+    active_plugins = None
+
+    # actual cli
     argv = sys.argv
     argc = len(argv)
     # 'lute list' to list all available/installed themes
@@ -35,37 +45,37 @@ def lute_help():
     """Explain the program's purpose and list commands."""
     print(r"""
     [green]lute list [/]
-        [white]list installed themes (found in .config/lute/themes/) [/]
+        [default]list installed themes (found in .config/lute/themes/) [/]
 
     [green]lute set \[theme] \[--light-mode / --dark-mode] [/]
-        [white]load the specified theme or set it to be the light-mode / dark-mode theme by default [/]
+        [default]load the specified theme or set it to be the light-mode / dark-mode theme by default [/]
 
     [green]lute darken / lute lighten [/]
-        [white]make the theme a lighter or darker shade, for supported themes (e.g. Catpuccin ) [/]
+        [default]make the theme a lighter or darker shade, for supported themes (e.g. Catpuccin ) [/]
 
     [green]lute dark / lute light [/]
-        [white]switch the theme to light / dark mode [/]
+        [default]switch the theme to light / dark mode [/]
 
     [green]lute refresh \[app] [/]
-        [white]refresh all lute-supported apps to apply theme. The [app] argument refreshes a specific app, e.g. hyprland. [/]
+        [default]refresh all lute-supported apps to apply theme. The [app] argument refreshes a specific app, e.g. hyprland. [/]
 
     [green]lute try \[theme] [/]
-        [white]"try on" a theme. is faster than 'set' but potentially has bugs and/or other issues. [/]
+        [default]"try on" a theme. is faster than 'set' but potentially has bugs and/or other issues. [/]
 
     [green]lute apps [/] 
-        [white]list all apps supported by lute, and whether they are installed and plugged in [/]
+        [default]list all apps supported by lute, and whether they are installed and plugged in [/]
 
     [green]lute plug \[app] [/]
-        [white]help with "plugging-in" an app [/]
+        [default]help with "plugging-in" an app [/]
 
     [green]lute config [/]
-        [white]change lute's own settings [/]
+        [default]change lute's own settings [/]
 
     [green]lute new [/]
-        [white]start the theme creation wizard to create your own theme (very basic. advanced themes require manual tinkering with the jsonc file.) [/]
+        [default]start the theme creation wizard to create your own theme (very basic. advanced themes require manual tinkering with the jsonc file.) [/]
 
     [green]lute install \[theme / url] [/]
-        [white]if given a theme name, will try to find a theme with this name in LUTE's official repo and install it.
+        [default]if given a theme name, will try to find a theme with this name in LUTE's official repo and install it.
         if given a url, will install the theme from there. (warning: file MUST be prefixed with 'lute-', for example 'lute-nord.jsonc') [/]
 
 """)
@@ -93,11 +103,48 @@ def lute_set(theme_name, light_mode=False, dark_mode=False):
     DARK MODE NOW" is lute's work.
     """
     global config
-    print(r"Loading [yellow]" + theme_name + r".jsonc[white] ...")
     config.select_theme(theme_name)
+    print(r"Loading [yellow]" + theme_name + r".jsonc[default] ...")
     theme = Theme.load()
-    print(r"[white]Done!~ [green]" + theme.metadata.name + r"[white] loaded successfully! :3")
-    print(theme)
+
+    plugin_classes = []
+
+    for module_info in pkgutil.iter_modules(lute.plugins.__path__):
+        if module_info.ispkg or module_info.name == "base":
+            continue
+
+        module = importlib.import_module(
+            f"lute.plugins.{module_info.name}"
+        )
+
+        for _, cls in inspect.getmembers(module, inspect.isclass):
+            if ( issubclass(cls, Plugin)  and  cls is not Plugin  and  cls.__module__ == module.__name__ ):
+                plugin_classes.append(cls)
+
+    plugins = [plugin_class() for plugin_class in plugin_classes]
+
+    for plugin in plugins:
+        if config.enabled_plugins.get(plugin.name, False) and plugin.detect(): 
+            if plugin.is_plugged_in():
+                print(plugin.name + " is active!")
+                if config.ez_mode:
+                    print("ez mode is not supported yet")
+                    return # remove when ez mode is supported :P
+                    print(r"[default]Generating ez overrides for [yellow]" + plugin.name + r"[default]...")
+                    plugin.generate_overrides(theme)
+                    plugin.refresh()
+                else:
+                    print(r"[default]Generating values for [yellow]" + plugin.name + r"[default]...")
+                    plugin.generate_variables(theme)
+                    plugin.refresh()
+            else:
+                if config.ez_mode:
+                    plugin.help_install(ez_mode=True)
+                else:
+                    plugin.help_install(ez_mode=False)
+
+    print(r"[default]Done!~ [green]" + theme.metadata.name + r"[default] loaded successfully! :3")
+
 
 def lute_darken():
     """Change the variant of the theme to its darker version (indicated
