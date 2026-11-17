@@ -5,6 +5,7 @@ from rich import print
 
 class KittyPlugin(Plugin):
     """ Kitty terminal plugin """
+    dislpay_name = "kitty"
     name = "kitty"
     version = "0.1"
 
@@ -24,43 +25,46 @@ class KittyPlugin(Plugin):
 
     def generate_variables(self, theme) -> None:
         path = config.xdg_config_home() / "kitty" / "lute-generated.conf"
-        with path.open("w", encoding="utf-8") as lute_generated:
+        with path.open("w", encoding="utf-8") as lgf: #lgf = Lute-Generated File
             term = theme.colors.terminal
             font = theme.fonts
 
-            lute_generated.write("# === TEXT ===\n")
-            lute_generated.write(f"foreground {term.foreground}\n")
-            lute_generated.write(f"background {term.background}\n")
-            lute_generated.write(f"selection_foreground {term.selection.foreground}\n")
-            lute_generated.write(f"selection_background {term.selection.background}\n")
+            lgf.write("# === TEXT ===\n")
+            lgf.write(f"foreground {term.foreground}\n")
+            lgf.write(f"background {term.background}\n")
+            lgf.write(f"selection_foreground {term.selection.foreground}\n")
+            lgf.write(f"selection_background {term.selection.background}\n")
 
-            lute_generated.write("# === COLORS ===\n")
+            lgf.write("# === COLORS ===\n")
             for index in range(16):
                 color = getattr(term.ansi, str(index))
-                lute_generated.write(f"color{index} {color}\n")
-            lute_generated.write(f"url_color {term.url}\n")
-            lute_generated.write(f"background_opacity {term.background_opacity}\n")
+                lgf.write(f"color{index} {color}\n")
+            lgf.write(f"url_color {term.url}\n")
+            lgf.write(f"background_opacity {term.background_opacity}\n")
 
-            lute_generated.write("# === TABS ===\n")
-            lute_generated.write(f"active_tab_foreground {term.tabs.active_foreground}\n")
-            lute_generated.write(f"active_tab_background {term.tabs.active_background}\n")
-            lute_generated.write(f"inactive_tab_foreground {term.tabs.inactive_foreground}\n")
-            lute_generated.write(f"inactive_tab_background {term.tabs.inactive_background}\n")
+            lgf.write("# === TABS ===\n")
+            lgf.write(f"active_tab_foreground {term.tabs.active_foreground}\n")
+            lgf.write(f"active_tab_background {term.tabs.active_background}\n")
+            lgf.write(f"inactive_tab_foreground {term.tabs.inactive_foreground}\n")
+            lgf.write(f"inactive_tab_background {term.tabs.inactive_background}\n")
 
-            lute_generated.write("# === FONTS ===\n")
-            lute_generated.write(f"font_family family='{font.normal.family}'\n")
-            lute_generated.write(f"bold_font family='{font.normal.family}'\n")
-            lute_generated.write(f"italic_font family='{font.normal.family}'\n")
-            lute_generated.write(f"bold_italic_font family='{font.normal.family}'\n")
-            lute_generated.write(f"font_size {font.normal.sizes.base}\n")
+            lgf.write("# === FONTS ===\n")
+            lgf.write(f"font_family family='{font.normal.family}'\n")
+            lgf.write(f"bold_font family='{font.normal.family}'\n")
+            lgf.write(f"italic_font family='{font.normal.family}'\n")
+            lgf.write(f"bold_italic_font family='{font.normal.family}'\n")
+            lgf.write(f"font_size {font.normal.sizes.base}\n")
 
 
 
     def generate_overrides(self, theme) -> None:
         raise NotImplementedError
 
-    def refresh(self) -> None:
-        subprocess.run("kill -USR1 $(pidof kitty) > /dev/null 2>&1", shell=True)
+    def refresh(self, quiet=True) -> None:
+        if quiet:
+            subprocess.run("kill -USR1 $(pidof kitty) > /dev/null 2>&1", shell=True)
+        else:
+            subprocess.run("kill -USR1 $(pidof kitty)", shell=True)
 
     def help_install(self, ez_mode) -> None:
         if ez_mode:

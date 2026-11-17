@@ -1,8 +1,12 @@
 import lute.config as config
+from lute.plugins.base import Plugin
+import subprocess
+from rich import print
 
 class QuickshellPlugin(Plugin):
     """ Plugin for Quickshell toolkit. """
-    name = "QuickShell"
+    dislpay_name = "QuickShell"
+    name = "quickshell"
     version = "0.0.1"
 
     def detect(self) -> bool:

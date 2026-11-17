@@ -526,7 +526,7 @@ class ThemeNode:
 
 class Theme(ThemeNode):
     @classmethod
-    def load(cls) -> "Theme":
+    def load_full(cls) -> "Theme":
         config = Config.load()
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)
@@ -536,7 +536,7 @@ class Theme(ThemeNode):
             recursive_normalization(defaults, schema, schema)
             defaults = convert_strs_to_color_refs(defaults)
 
-            user_defaults_path = config.lute_dir / "user_defaults.jsonc"
+            user_defaults_path = config.lute_dir / "user-defaults.jsonc"
             user_defaults = {}
             if user_defaults_path.exists():
                 user_defaults = load_jsonc_noreq(user_defaults_path)
@@ -550,7 +550,7 @@ class Theme(ThemeNode):
             recursive_normalization(selected_theme, schema, schema)
             selected_theme = convert_strs_to_color_refs(selected_theme)
 
-            user_overrides_path = config.lute_dir / "user_overrides.jsonc"
+            user_overrides_path = config.lute_dir / "user-overrides.jsonc"
             user_overrides = {}
             if user_overrides_path.exists():
                 user_overrides = load_jsonc_noreq(user_overrides_path)
@@ -563,6 +563,22 @@ class Theme(ThemeNode):
             final_dict = deep_merge(final_dict, user_overrides)
 
             final_dict = resolve_color_references(final_dict, schema)
+
+            return cls(final_dict)
+    
+    @classmethod
+    def load_file(cls) -> "Theme":
+        config = Config.load()
+        with as_file(files("lute").joinpath("theme.schema.json")) as file:
+            schema = load_jsonc(file)
+
+            selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
+            selected_theme = load_jsonc_req(selected_theme_path)
+            validate_fonts(selected_theme)
+            recursive_normalization(selected_theme, schema, schema)
+            selected_theme = convert_strs_to_color_refs(selected_theme)
+
+            final_dict = resolve_color_references(selected_theme, schema)
 
             return cls(final_dict)
 

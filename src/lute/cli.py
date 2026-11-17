@@ -145,7 +145,7 @@ def lute_set(theme_name, light_mode=False, dark_mode=False, verbose=False):
         config.select_theme(old_theme)
         return 1
 
-    theme = Theme.load()
+    theme = Theme.load_full()
 
     plugin_classes = []
 
@@ -165,23 +165,22 @@ def lute_set(theme_name, light_mode=False, dark_mode=False, verbose=False):
 
     for plugin in plugins:
         if config.enabled_plugins.get(plugin.name, False) and plugin.detect(): 
-            if plugin.is_plugged_in():
-                if config.ez_mode:
-                    print("ez mode is not supported yet")
-                    return # remove when ez mode is supported :P
-                    print(r"[default]Generating ez overrides for [yellow]" + plugin.name + r"[default]...")
-                    plugin.generate_overrides(theme)
-                    plugin.refresh()
-                else:
-                    if verbose:
-                        print(r"[default]Generating values for [yellow]" + plugin.name + r"[default]...")
-                    plugin.generate_variables(theme)
-                    plugin.refresh()
-            else:
+            if not plugin.is_plugged_in():
                 if config.ez_mode:
                     plugin.help_install(ez_mode=True)
                 else:
                     plugin.help_install(ez_mode=False)
+            if config.ez_mode:
+                print("ez mode is not supported yet")
+                return # remove when ez mode is supported :P
+                print(r"[default]Generating ez overrides for [yellow]" + plugin.name + r"[default]...")
+                plugin.generate_overrides(theme)
+                plugin.refresh()
+            else:
+                if verbose:
+                    print(r"[default]Generating values for [yellow]" + plugin.name + r"[default]...")
+                plugin.generate_variables(theme)
+                plugin.refresh()
 
     print(r"[default]Done!~ [green]" + theme.metadata.name + r"[default] loaded successfully! :3")
 
@@ -192,7 +191,7 @@ def lute_darken():
     have a binary dark/light system, but some (like Catppuccin or my own
     theme later) can have more levels.
     """
-    theme = Theme.load()
+    theme = Theme.load_file()
     try:
         theme_to_load = theme.metadata.darker_ver
         lute_set(theme_to_load)
@@ -205,7 +204,7 @@ def lute_lighten():
     have a binary dark/light system, but some (like Catppuccin or my own
     theme later) can have more levels.
     """
-    theme = Theme.load()
+    theme = Theme.load_file()
     try:
         theme_to_load = theme.metadata.lighter_ver
         lute_set(theme_to_load)
@@ -214,7 +213,7 @@ def lute_lighten():
 
 def lute_dark():
     """Switch the theme to its darkest variant."""
-    theme = Theme.load()
+    theme = Theme.load_file()
     try:
         theme_to_load = theme.metadata.darkest_ver
         lute_set(theme_to_load)
@@ -223,7 +222,7 @@ def lute_dark():
 
 def lute_light():
     """Switch the theme to its lightest variant."""
-    theme = Theme.load()
+    theme = Theme.load_file()
     try:
         theme_to_load = theme.metadata.lightest_ver
         lute_set(theme_to_load)

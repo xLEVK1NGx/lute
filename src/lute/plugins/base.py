@@ -23,7 +23,7 @@ class Plugin():
         config """
         raise NotImplementedError
 
-    def refresh(self) -> None:
+    def refresh(self, quiet=True) -> None:
         """ Refresh the app to apply the config. Should NEVER close and reopen
         the app, this is only intended for a dynamic reloading """
         raise NotImplementedError
