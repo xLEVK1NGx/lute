@@ -1,0 +1,532 @@
+// LUTE theme template — all values are intentionally empty placeholders.
+// Replace each "" with a value of the correct type; this template is NOT valid as a theme yet.
+// Remove optional fields you do not want to set. Never use null.
+// Variant colors may instead be a single hex color or color reference.
+// Radius, gaps, side values and spacing scales also accept shorthand forms.
+// Lists of four sides use clockwise order; effect scopes inherit from their default.
+{
+    // Optional schema URI for editor support.
+    "$schema": "",
+    // Theme identity, version, light/dark variant and optional links to related themes.
+    "metadata": {
+        "name": "",
+        "authors": [""],
+        "theme_version": "",
+        "lute_version": "",
+        "variant": "",
+        "description": "",
+        "lightest_ver": "",
+        "lighter_ver": "",
+        "darker_ver": "",
+        "darkest_ver": ""
+    },
+    // Color palette and application roles. Colors accept hex strings or color references.
+    "colors": {
+        // Named palette colors. Object colors have base, dark and light variants.
+        "palette": {
+            "black": "",
+            "white": "",
+            "gray": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "red": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "orange": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "yellow": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "green": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "cyan": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "blue": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "purple": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "pink": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            }
+        },
+        // Colors for interface surfaces, text, interaction and borders.
+        "UI": {
+            "background": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "surface": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "foreground": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "accent": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "accent_alt": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "selection": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "hover": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "overlay": {
+                "base": "",
+                "dark": "",
+                "light": ""
+            },
+            "text": {
+                "base": {
+                    "base": "",
+                    "dark": "",
+                    "light": ""
+                },
+                "muted": {
+                    "base": "",
+                    "dark": "",
+                    "light": ""
+                },
+                "disabled": {
+                    "base": "",
+                    "dark": "",
+                    "light": ""
+                },
+                "inverse": {
+                    "base": "",
+                    "dark": "",
+                    "light": ""
+                }
+            },
+            "border": {
+                "base": {
+                    "base": "",
+                    "dark": "",
+                    "light": ""
+                },
+                "focused": {
+                    "base": "",
+                    "dark": "",
+                    "light": ""
+                }
+            }
+        },
+        // Colors for informational, warning, error and success states.
+        "semantic": {
+            "info": "",
+            "warning": "",
+            "error": "",
+            "success": "",
+            "feedback": ""
+        },
+        // Terminal colors, opacity and indexed ANSI palette (0–15).
+        "terminal": {
+            "ansi": {
+                "0": "",
+                "1": "",
+                "2": "",
+                "3": "",
+                "4": "",
+                "5": "",
+                "6": "",
+                "7": "",
+                "8": "",
+                "9": "",
+                "10": "",
+                "11": "",
+                "12": "",
+                "13": "",
+                "14": "",
+                "15": ""
+            },
+            "foreground": "",
+            "background": "",
+            "cursor": "",
+            "cursor_text": "",
+            "url": "",
+            "selection": {
+                "background": "",
+                "foreground": ""
+            },
+            "tabs": {
+                "active_background": "",
+                "active_foreground": "",
+                "inactive_background": "",
+                "inactive_foreground": ""
+            },
+            "background_opacity": ""
+        }
+    },
+    // Corner shape, corner radius, borders and inner/outer gaps.
+    "geometry": {
+        "corner_shape": "",
+        "corner_radius": ["", "", "", ""],
+        "border_width": "",
+        "gaps": {
+            "inner": ["", "", "", ""],
+            "outer": ["", "", "", ""]
+        }
+    },
+    // Padding and margin scales (small, medium and large).
+    "spacing": {
+        "padding": {
+            "sm": "",
+            "md": "",
+            "lg": ""
+        },
+        "margin": {
+            "sm": "",
+            "md": "",
+            "lg": ""
+        }
+    },
+    // Global sizes and font slots. Each font inherits global sizes unless it has its own.
+    "fonts": {
+        "sizes": {
+            "min": "",
+            "base": "",
+            "max": ""
+        },
+        "normal": {
+            "family": "",
+            "style": "",
+            "sizes": {
+                "min": "",
+                "base": "",
+                "max": ""
+            }
+        },
+        "serif": {
+            "family": "",
+            "style": "",
+            "sizes": {
+                "min": "",
+                "base": "",
+                "max": ""
+            }
+        },
+        "monospace": {
+            "family": "",
+            "style": "",
+            "sizes": {
+                "min": "",
+                "base": "",
+                "max": ""
+            }
+        },
+        "title": {
+            "family": "",
+            "style": "",
+            "sizes": {
+                "min": "",
+                "base": "",
+                "max": ""
+            }
+        },
+        "small": {
+            "family": "",
+            "style": "",
+            "sizes": {
+                "min": "",
+                "base": "",
+                "max": ""
+            }
+        }
+    },
+    // Optional effects: each default supplies values inherited by its scopes.
+    "effects": {
+        // Blur settings: default values and scope-specific overrides.
+        "blur": {
+            "default": {
+                "enabled": "",
+                "strength": "",
+                "passes": "",
+                "noise": ""
+            },
+            "window_bg": {
+                "enabled": "",
+                "strength": "",
+                "passes": "",
+                "noise": ""
+            },
+            "inactive_windows": {
+                "enabled": "",
+                "strength": "",
+                "passes": "",
+                "noise": ""
+            },
+            "overlay": {
+                "enabled": "",
+                "strength": "",
+                "passes": "",
+                "noise": ""
+            },
+            "panel": {
+                "enabled": "",
+                "strength": "",
+                "passes": "",
+                "noise": ""
+            },
+            "wallpaper": {
+                "enabled": "",
+                "strength": "",
+                "passes": "",
+                "noise": ""
+            }
+        },
+        // Glass settings: default values and scope-specific overrides.
+        "glass": {
+            "default": {
+                "enabled": "",
+                "blur": "",
+                "tint": "",
+                "tint_opacity": "",
+                "noise": "",
+                "border": "",
+                "highlight": {
+                    "enabled": "",
+                    "color": "",
+                    "opacity": "",
+                    "position": ""
+                }
+            },
+            "panel": {
+                "enabled": "",
+                "blur": "",
+                "tint": "",
+                "tint_opacity": "",
+                "noise": "",
+                "border": "",
+                "highlight": {
+                    "enabled": "",
+                    "color": "",
+                    "opacity": "",
+                    "position": ""
+                }
+            },
+            "overlay": {
+                "enabled": "",
+                "blur": "",
+                "tint": "",
+                "tint_opacity": "",
+                "noise": "",
+                "border": "",
+                "highlight": {
+                    "enabled": "",
+                    "color": "",
+                    "opacity": "",
+                    "position": ""
+                }
+            },
+            "interactive": {
+                "enabled": "",
+                "blur": "",
+                "tint": "",
+                "tint_opacity": "",
+                "noise": "",
+                "border": "",
+                "highlight": {
+                    "enabled": "",
+                    "color": "",
+                    "opacity": "",
+                    "position": ""
+                }
+            },
+            "active_window": {
+                "enabled": "",
+                "blur": "",
+                "tint": "",
+                "tint_opacity": "",
+                "noise": "",
+                "border": "",
+                "highlight": {
+                    "enabled": "",
+                    "color": "",
+                    "opacity": "",
+                    "position": ""
+                }
+            },
+            "inactive_windows": {
+                "enabled": "",
+                "blur": "",
+                "tint": "",
+                "tint_opacity": "",
+                "noise": "",
+                "border": "",
+                "highlight": {
+                    "enabled": "",
+                    "color": "",
+                    "opacity": "",
+                    "position": ""
+                }
+            }
+        },
+        // Opacity settings: default values and scope-specific overrides.
+        "opacity": {
+            "default": {
+                "value": ""
+            },
+            "active_window": {
+                "value": ""
+            },
+            "inactive_windows": {
+                "value": ""
+            },
+            "window_bg": {
+                "value": ""
+            },
+            "panel": {
+                "value": ""
+            }
+        },
+        // Dimming settings: default values and scope-specific overrides.
+        "dimming": {
+            "default": {
+                "enabled": "",
+                "strength": ""
+            },
+            "active_window": {
+                "enabled": "",
+                "strength": ""
+            },
+            "inactive_windows": {
+                "enabled": "",
+                "strength": ""
+            },
+            "overlay": {
+                "enabled": "",
+                "strength": ""
+            }
+        },
+        // Shadows settings: default values and scope-specific overrides.
+        "shadows": {
+            "default": {
+                "enabled": "",
+                "range": "",
+                "offset_x": "",
+                "offset_y": "",
+                "color": ""
+            },
+            "window_bg": {
+                "enabled": "",
+                "range": "",
+                "offset_x": "",
+                "offset_y": "",
+                "color": ""
+            },
+            "overlay": {
+                "enabled": "",
+                "range": "",
+                "offset_x": "",
+                "offset_y": "",
+                "color": ""
+            },
+            "panel": {
+                "enabled": "",
+                "range": "",
+                "offset_x": "",
+                "offset_y": "",
+                "color": ""
+            }
+        },
+        // Pixelate settings: default values and scope-specific overrides.
+        "pixelate": {
+            "default": {
+                "enabled": "",
+                "block_size": ""
+            },
+            "full_screen": {
+                "enabled": "",
+                "block_size": ""
+            },
+            "wallpaper": {
+                "enabled": "",
+                "block_size": ""
+            },
+            "app_icons": {
+                "enabled": "",
+                "block_size": ""
+            }
+        },
+        // Glow settings: default values and scope-specific overrides.
+        "glow": {
+            "default": {
+                "enabled": "",
+                "color": "",
+                "range": "",
+                "intensity": ""
+            },
+            "active_window": {
+                "enabled": "",
+                "color": "",
+                "range": "",
+                "intensity": ""
+            },
+            "window_bg": {
+                "enabled": "",
+                "color": "",
+                "range": "",
+                "intensity": ""
+            },
+            "overlay": {
+                "enabled": "",
+                "color": "",
+                "range": "",
+                "intensity": ""
+            }
+        },
+        // Saturation settings: default values and scope-specific overrides.
+        "saturation": {
+            "default": {
+                "value": ""
+            },
+            "full_screen": {
+                "value": ""
+            },
+            "wallpaper": {
+                "value": ""
+            },
+            "inactive_windows": {
+                "value": ""
+            }
+        }
+    }
+}

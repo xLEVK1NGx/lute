@@ -83,7 +83,7 @@
     "geometry": {
         "corner_shape": "round",
         "corner_radius": 8,
-        "border_width": 1,
+        "border_width": 2,
         "gaps": 4
     },
     "spacing": {

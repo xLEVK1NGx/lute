@@ -364,7 +364,13 @@
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_blur"
+                            "$ref": "#/$defs/Effect_blur",
+                            "required": [
+                                "enabled",
+                                "strength",
+                                "passes",
+                                "noise"
+                            ]
                         },
                         "window_bg": {
                             "$ref": "#/$defs/Effect_blur"
@@ -380,15 +386,30 @@
                         },
                         "wallpaper": {
                             "$ref": "#/$defs/Effect_blur"
+                        },
+                        "interactive": {
+                            "$ref": "#/$defs/Effect_blur"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "glass": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_glass"
+                            "$ref": "#/$defs/Effect_glass",
+                            "required": [
+                                "enabled",
+                                "blur",
+                                "tint",
+                                "tint_opacity",
+                                "noise",
+                                "border"
+                            ]
                         },
                         "panel": {
                             "$ref": "#/$defs/Effect_glass"
@@ -406,13 +427,20 @@
                             "$ref": "#/$defs/Effect_glass"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "opacity": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_opacity"
+                            "$ref": "#/$defs/Effect_opacity",
+                            "required": [
+                                "value"
+                            ]
                         },
                         "active_window": {
                             "$ref": "#/$defs/Effect_opacity"
@@ -427,13 +455,21 @@
                             "$ref": "#/$defs/Effect_opacity"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "dimming": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_dimming"
+                            "$ref": "#/$defs/Effect_dimming",
+                            "required": [
+                                "enabled",
+                                "strength"
+                            ]
                         },
                         "active_window": {
                             "$ref": "#/$defs/Effect_dimming"
@@ -445,13 +481,24 @@
                             "$ref": "#/$defs/Effect_dimming"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "shadows": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_shadows"
+                            "$ref": "#/$defs/Effect_shadows",
+                            "required": [
+                                "enabled",
+                                "range",
+                                "offset_x",
+                                "offset_y",
+                                "color"
+                            ]
                         },
                         "window_bg": {
                             "$ref": "#/$defs/Effect_shadows"
@@ -463,13 +510,21 @@
                             "$ref": "#/$defs/Effect_shadows"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "pixelate": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_pixelate"
+                            "$ref": "#/$defs/Effect_pixelate",
+                            "required": [
+                                "enabled",
+                                "block_size"
+                            ]
                         },
                         "full_screen": {
                             "$ref": "#/$defs/Effect_pixelate"
@@ -481,13 +536,23 @@
                             "$ref": "#/$defs/Effect_pixelate"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "glow": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_glow"
+                            "$ref": "#/$defs/Effect_glow",
+                            "required": [
+                                "enabled",
+                                "color",
+                                "range",
+                                "intensity"
+                            ]
                         },
                         "active_window": {
                             "$ref": "#/$defs/Effect_glow"
@@ -499,13 +564,20 @@
                             "$ref": "#/$defs/Effect_glow"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 },
                 "saturation": {
                     "type": "object",
                     "properties": {
                         "default": {
-                            "$ref": "#/$defs/Effect_saturation"
+                            "$ref": "#/$defs/Effect_saturation",
+                            "required": [
+                                "value"
+                            ]
                         },
                         "full_screen": {
                             "$ref": "#/$defs/Effect_saturation"
@@ -517,7 +589,11 @@
                             "$ref": "#/$defs/Effect_saturation"
                         }
                     },
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "x-lute-normalize": "effect",
+                    "required": [
+                        "default"
+                    ]
                 }
             },
             "additionalProperties": false

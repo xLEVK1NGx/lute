@@ -10,13 +10,18 @@ from pathlib import Path
 import re
 from rich import print
 import subprocess
+import sys
 
 # functions to load jsonc files and such
 
 def load_jsonc(path) -> dict:
     """ Returns a dict with all the data from the specified jsonc file """
-    with path.open(encoding="UTF-8") as file:
-        return json.load(file)
+    try:
+        with path.open(encoding="UTF-8") as file:
+            return json.load(file)
+    except ValueError:
+        print("[red]Invalid jsonc file!")
+        sys.exit()
 
 def remove_requireds(data: dict):
     """ Helper func to remove all "required" fields from a json schema """
@@ -96,8 +101,6 @@ def recursive_normalization(value, field_schema, schema):
                 value = normalize_side_values(value)
             case "spacing_scale":
                 value = normalize_spacing_scale(value)
-            case "font_sizes":
-                value = normalize_font_sizes(value)
 
     if "oneOf" in field_schema:
         for branch in field_schema["oneOf"]:
@@ -161,6 +164,41 @@ def normalize_spacing_scale(value):
         return {"sm": value, "md": value, "lg": value}
     return value
 
+# POST-MERGE NORMALIZATIONS
+
+def final_normalization(value, field_schema, schema):
+    if "$ref" in field_schema:
+        resolved_schema = resolve(field_schema["$ref"], schema)
+        return final_normalization(value, resolved_schema, schema)
+
+    if "x-lute-normalize" in field_schema:
+        match field_schema["x-lute-normalize"]:
+            case "font_sizes":
+                value = normalize_font_sizes(value)
+            case "effect":
+                value = normalize_effect(value, field_schema)
+
+    if "oneOf" in field_schema:
+        for branch in field_schema["oneOf"]:
+            if "$ref" in branch:
+                branch = resolve(branch["$ref"], schema)
+            if matches_type(value, branch.get("type")):
+                field_schema = branch
+                break
+        else: 
+            raise ValueError(f"No oneOf branch matches value {value!r}")
+
+    if isinstance(value, dict):
+        for field in value:
+            value[field] = final_normalization(value[field],
+                                                   field_schema["properties"][field],
+                                                   schema)
+    elif isinstance(value, list):
+        for index in range(len(value)): 
+            value[index] = final_normalization(value[index], field_schema["items"], schema)
+
+    return value
+
 def normalize_font_sizes(fonts: dict) -> dict:
     if "sizes" not in fonts:
         return fonts
@@ -170,6 +208,13 @@ def normalize_font_sizes(fonts: dict) -> dict:
             fonts[slot_name].setdefault("sizes", fonts["sizes"].copy())
 
     return fonts
+
+def normalize_effect(effect: dict, schema: dict):
+    for scope in schema["properties"]:
+        if scope == "default":
+            continue
+        effect[scope] = deep_merge(effect["default"], effect.get(scope, {}))
+    return effect
 
 # fonts validation
 def validate_fonts(data: dict):
@@ -563,6 +608,7 @@ class Theme(ThemeNode):
             final_dict = deep_merge(final_dict, user_overrides)
 
             final_dict = resolve_color_references(final_dict, schema)
+            final_dict = final_normalization(final_dict, schema, schema)
 
             return cls(final_dict)
     

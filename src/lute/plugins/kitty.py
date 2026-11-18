@@ -49,11 +49,11 @@ class KittyPlugin(Plugin):
             lgf.write(f"inactive_tab_background {term.tabs.inactive_background}\n")
 
             lgf.write("# === FONTS ===\n")
-            lgf.write(f"font_family family='{font.normal.family}'\n")
-            lgf.write(f"bold_font family='{font.normal.family}'\n")
-            lgf.write(f"italic_font family='{font.normal.family}'\n")
-            lgf.write(f"bold_italic_font family='{font.normal.family}'\n")
-            lgf.write(f"font_size {font.normal.sizes.base}\n")
+            lgf.write(f"font_family family='{font.monospace.family}'\n")
+            lgf.write(f"bold_font family='{font.monospace.family}'\n")
+            lgf.write(f"italic_font family='{font.monospace.family}'\n")
+            lgf.write(f"bold_italic_font family='{font.monospace.family}'\n")
+            lgf.write(f"font_size {font.monospace.sizes.base}\n")
 
 
 

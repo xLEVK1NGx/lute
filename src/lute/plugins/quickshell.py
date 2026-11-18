@@ -11,7 +11,9 @@ class QuickshellPlugin(Plugin):
 
     def detect(self) -> bool:
         """ Detects whether the app is installed """
-        raise NotImplementedError
+        if subprocess.run("which qs > /dev/null 2>&1", shell=True, ).returncode == 0:
+            return True
+        return False
 
     def is_plugged_in(self) -> bool:
         """ Detects if the app is plugged in """
