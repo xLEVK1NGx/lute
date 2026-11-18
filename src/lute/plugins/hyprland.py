@@ -31,7 +31,7 @@ class HyprlandPlugin(Plugin):
         path = config.xdg_config_home() / "hypr" / "lute-generated.lua"
         with path.open("w", encoding="utf-8") as lgf:
             geo = theme.geometry
-            col = theme.colors
+            palette = theme.colors.palette
             ui = theme.colors.UI
             font = theme.fonts
             fx = theme.effects
@@ -43,8 +43,19 @@ class HyprlandPlugin(Plugin):
                 roudning_power = 1
             else:
                 rounding_power = 2
+            # list of palette colors with ligqs -c $(qs list --all | awk -F 'Config path: ' '{print $2}' | awk -F '/quickshell/' '{print $2}' | awk -F '/shell.qml' '{print $1}') ipc call lute refreshht, base, dark shades
+            palette_dict = {}
 
-
+            for color, obj in vars(palette).items():
+                if color == "white" or color == "black":
+                    palette_dict[color] = obj
+                    continue
+                for shade, value in vars(obj).items():
+                    palette_dict[f"{color}_{shade}"] = value
+            palette_strs = "\n".join(
+                    f'lute_palette_{name} = "{value}"'
+                    for name, value in palette_dict.items()
+            )
             # for lists lua uses '{}' instead of '[]' so you have to do
             # str(value).strip('[]') for every list...       so cool!
             lgf.write(
@@ -59,9 +70,8 @@ lute_border_inactive_light = "{ui.border.base.light}"
 lute_border_inactive_base = "{ui.border.base.base}"
 lute_border_inactive_dark = "{ui.border.base.dark}"
 
--- bonus color (palette)    # REMOVE THIS COMMENT // i gotta use a for loop here somehow
-
-
+-- bonus color (palette)
+{palette_strs}
 
 -- corners
 lute_rounding = {rounding}
@@ -75,28 +85,28 @@ lute_gaps_in = {{{str(geo.gaps.inner).strip("[]")}}}
 lute_gaps_out = {sum(geo.gaps.outer)//4}
 
 -- blur
-lute_blur_enabled = {fx.blur.window_bg.enabled}
-lute_blur_size = {fx.blur.window_bg.strength}
+lute_blur_enabled = {str(fx.blur.window_bg.enabled).lower()}
+lute_blur_size = {fx.blur.window_bg.size}
 lute_blur_passes = {fx.blur.window_bg.passes}
-lute_blur_vibrancy = {1-fx.blur.window_bg.noise}
-lute_blur_popups = {fx.blur.interactive.enabled}
+lute_blur_vibrancy = {1 - fx.blur.window_bg.noise}
+lute_blur_popups = {fx.blur.wallpaper.enabled}
 
 -- shadow
-lute_shadow_enabled = {fx.shadows.window_bg.enabled}
+lute_shadow_enabled = {str(fx.shadows.window_bg.enabled).lower()}
 lute_shadow_range = {fx.shadows.window_bg.range}
-lute_shadow_render_power = {4} -- this gotta change later :P
+lute_shadow_render_power = {int(fx.shadows.window_bg.falloff*4) if fx.shadows.window_bg.falloff > 0.25 else 1}
 lute_shadow_color = "{fx.shadows.window_bg.color}"
 
 -- fonts
 lute_font_family = "{font.normal.family}"
 lute_splash_font_family = "{font.title.family}"
 
-"""
-)
+""")
 
     def generate_overrides(self, theme: Theme) -> None:
         """ Generates lute theme-based overrides to import at the BOTTOM of a
         config """
+        print("ez mode is not supported yet!")
         raise NotImplementedError
 
     def refresh(self, quiet=True) -> None:

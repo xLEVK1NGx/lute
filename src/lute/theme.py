@@ -4,7 +4,7 @@ from dataclasses import *
 from enum import Enum
 from importlib.resources import files, as_file
 import json5 as json
-from jsonschema import validate, Draft202012Validator
+from jsonschema import validate, Draft202012Validator, exceptions as schemaexceptions
 from lute.config import *
 from pathlib import Path
 import re
@@ -19,8 +19,9 @@ def load_jsonc(path) -> dict:
     try:
         with path.open(encoding="UTF-8") as file:
             return json.load(file)
-    except ValueError:
+    except ValueError as e:
         print("[red]Invalid jsonc file!")
+        print(e)
         sys.exit()
 
 def remove_requireds(data: dict):
@@ -39,8 +40,12 @@ def load_jsonc_req(path: Path) -> dict:
         schema = load_jsonc(file) 
     Draft202012Validator.check_schema(schema)
     theme_data = load_jsonc(path)
-
-    validate(instance=theme_data, schema=schema)
+    try:
+        validate(instance=theme_data, schema=schema)
+    except schemaexceptions.ValidationError as e:
+        print("[red]The file isn't a valid LUTE theme!")
+        print(e)
+        sys.exit()
     return theme_data
 
 def load_jsonc_noreq(path) -> dict:

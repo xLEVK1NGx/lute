@@ -367,7 +367,7 @@
                             "$ref": "#/$defs/Effect_blur",
                             "required": [
                                 "enabled",
-                                "strength",
+                                "size",
                                 "passes",
                                 "noise"
                             ]
@@ -385,9 +385,6 @@
                             "$ref": "#/$defs/Effect_blur"
                         },
                         "wallpaper": {
-                            "$ref": "#/$defs/Effect_blur"
-                        },
-                        "interactive": {
                             "$ref": "#/$defs/Effect_blur"
                         }
                     },
@@ -846,11 +843,6 @@
                 "enabled": {
                     "type": "boolean"
                 },
-                "strength": {
-                    "type": "number",
-                    "minimum": 0,
-                    "maximum": 1
-                },
                 "passes": {
                     "type": "integer",
                     "minimum": 0
@@ -859,6 +851,10 @@
                     "type": "number",
                     "minimum": 0,
                     "maximum": 1
+                },
+                "size": {
+                    "type": "number",
+                    "minimum": 0
                 }
             },
             "additionalProperties": false
@@ -965,6 +961,12 @@
                 },
                 "color": {
                     "$ref": "#/$defs/ColorValue"
+                },
+                "falloff": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Relative shadow falloff rate: 0 is slower, 1 is faster. Plugins map this value to their native settings."
                 }
             },
             "additionalProperties": false

@@ -106,8 +106,7 @@ def lute_list_themes(want_return = False, autocompletion = False):
                             capture_output=True, 
                             text=True, 
                             check=True)
-    lst = result.stdout.split("\n")
-    lst.remove('')
+    lst = result.stdout.splitlines()
 
     if want_return:
         return lst

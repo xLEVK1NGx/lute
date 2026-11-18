@@ -1,19 +1,22 @@
+// Bundled defaults. Themes and user layers override these values.
+// Effect scopes are intentionally empty: post-merge normalization fills them
+// from the corresponding default, without masking theme-specific defaults.
+// Metadata is omitted: it belongs to the selected theme, not global defaults.
+// Most defaults are intentionally basic; optional shadow falloff is 0.
 {
-    // LUTE bundled defaults. Later layers override these values.
-    // Theme-specific metadata and variant links are intentionally omitted.
     "colors": {
         "palette": {
             "black": "#000000",
             "white": "#ffffff",
-            "gray": "#707070",
-            "red": "#e7024e",
-            "orange": "#ff812e",
-            "yellow": "#e5e34f",
-            "green": "#05e06f",
-            "cyan": "#01dbdb",
-            "blue": "#3838ff",
-            "purple": "#a855ff",
-            "pink": "#ec4cc6"
+            "gray": "#808080",
+            "red": "#ff0000",
+            "orange": "#ff8000",
+            "yellow": "#ffff00",
+            "green": "#00ff00",
+            "cyan": "#00ffff",
+            "blue": "#0000ff",
+            "purple": "#800080",
+            "pink": "#ff00ff"
         },
         "UI": {
             "background": "palette.black",
@@ -43,7 +46,7 @@
             "feedback": "palette.gray.light"
         },
         "terminal": {
-            // Default indexed ANSI mapping; later layers can override slots.
+            "background_opacity": 1,
             "ansi": {
                 "0": "palette.black",
                 "1": "palette.red.base",
@@ -79,31 +82,64 @@
             }
         }
     },
-
     "geometry": {
-        "corner_shape": "round",
-        "corner_radius": 8,
-        "border_width": 2,
-        "gaps": 4
+        "corner_shape": "sharp",
+        "corner_radius": 0,
+        "border_width": 0,
+        "gaps": 0
     },
     "spacing": {
-        "padding": { "sm": 4, "md": 8, "lg": 16 },
-        "margin": { "sm": 4, "md": 8, "lg": 16 }
+        "padding": {
+            "sm": 0,
+            "md": 0,
+            "lg": 0
+        },
+        "margin": {
+            "sm": 0,
+            "md": 0,
+            "lg": 0
+        }
     },
     "fonts": {
-        "sizes": { "min": 10, "base": 12, "max": 18 },
-        "normal": { "family": "sans-serif", "style": "normal" },
-        "serif": { "family": "serif", "style": "normal" },
-        "monospace": { "family": "monospace", "style": "normal" },
-        "title": { "family": "sans-serif", "style": "normal" },
-        "small": { "family": "sans-serif", "style": "normal" }
+        "sizes": {
+            "min": 10,
+            "base": 12,
+            "max": 18
+        },
+        "normal": {
+            "family": "sans-serif",
+            "style": "normal"
+        },
+        "serif": {
+            "family": "serif",
+            "style": "normal"
+        },
+        "monospace": {
+            "family": "monospace",
+            "style": "normal"
+        },
+        "title": {
+            "family": "sans-serif",
+            "style": "normal"
+        },
+        "small": {
+            "family": "sans-serif",
+            "style": "normal"
+        }
     },
-
-    // Effect defaults are neutral or disabled. Scope blocks are intentionally
-    // omitted: the current parser does not yet implement scope inheritance.
     "effects": {
         "blur": {
-            "default": { "enabled": false, "strength": 0, "passes": 0, "noise": 0 }
+            "default": {
+                "enabled": false,
+                "size": 0,
+                "passes": 0,
+                "noise": 0
+            },
+            "window_bg": {},
+            "inactive_windows": {},
+            "overlay": {},
+            "panel": {},
+            "wallpaper": {}
         },
         "glass": {
             "default": {
@@ -119,13 +155,30 @@
                     "opacity": 0,
                     "position": "top"
                 }
-            }
+            },
+            "panel": {},
+            "overlay": {},
+            "interactive": {},
+            "active_window": {},
+            "inactive_windows": {}
         },
         "opacity": {
-            "default": { "value": 1 }
+            "default": {
+                "value": 1
+            },
+            "active_window": {},
+            "inactive_windows": {},
+            "window_bg": {},
+            "panel": {}
         },
         "dimming": {
-            "default": { "enabled": false, "strength": 0 }
+            "default": {
+                "enabled": false,
+                "strength": 0
+            },
+            "active_window": {},
+            "inactive_windows": {},
+            "overlay": {}
         },
         "shadows": {
             "default": {
@@ -133,11 +186,21 @@
                 "range": 0,
                 "offset_x": 0,
                 "offset_y": 0,
-                "color": "palette.black"
-            }
+                "color": "palette.black",
+                "falloff": 0
+            },
+            "window_bg": {},
+            "overlay": {},
+            "panel": {}
         },
         "pixelate": {
-            "default": { "enabled": false, "block_size": 1 }
+            "default": {
+                "enabled": false,
+                "block_size": 1
+            },
+            "full_screen": {},
+            "wallpaper": {},
+            "app_icons": {}
         },
         "glow": {
             "default": {
@@ -145,10 +208,18 @@
                 "color": "UI.accent.base",
                 "range": 0,
                 "intensity": 0
-            }
+            },
+            "active_window": {},
+            "window_bg": {},
+            "overlay": {}
         },
         "saturation": {
-            "default": { "value": 100 }
+            "default": {
+                "value": 100
+            },
+            "full_screen": {},
+            "wallpaper": {},
+            "inactive_windows": {}
         }
     }
 }
