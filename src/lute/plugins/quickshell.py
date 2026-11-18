@@ -20,24 +20,48 @@ class QuickshellPlugin(Plugin):
     def is_plugged_in(self) -> bool:
         """ Detects if the app is plugged in """
         path = config.xdg_config_home() / "quickshell"
-        # 1. make sure that quickshell/Lute is on PATH
-          #  will do later
-        # 2. make sure that at least one config in qs/*/shell.qml imports Lute module
         if not path.is_dir():
             return False
+
+        for file in path.iterdir():
+        # make sure that at least one config in qs/*/shell.qml imports Lute module
+            file = file / "shell.qml"
+            if not file.is_file():
+                continue
+            with file.open(encoding="utf-8") as qs_conf:
+                for line in qs_conf:
+                    if line.strip() == "import qs.Lute":
+                    # check for a lute symlink in every config that imports Lute
+                        folder = file.parent
+                        lute_folder = config.xdg_config_home() / "quickshell/Lute"
+                        link = file.parent / "Lute"
+                        if link.is_symlink() and link.resolve() == lute_folder.resolve():
+                            return True
+        return False
+
+    def generate_variables(self, theme: Theme) -> None:
+        """ Generates the lute variables in the app's supported format, to be 
+        imported at the TOP of a config and used as variables """
+        # generate symlinks for the core module
+        path = config.xdg_config_home() / "quickshell"
+        if not path.is_dir():
+            return False
+
         for file in path.iterdir():
             file = file / "shell.qml"
             if not file.is_file():
                 continue
             with file.open(encoding="utf-8") as qs_conf:
                 for line in qs_conf:
-                    if line.strip() == "import Lute":
-                        return True
-        return False
-
-    def generate_variables(self, theme: Theme) -> None:
-        """ Generates the lute variables in the app's supported format, to be 
-        imported at the TOP of a config and used as variables """
+                    if line.strip() == "import qs.Lute":
+                    # check for a lute symlink in every config that imports Lute
+                        folder = file.parent
+                        lute_folder = config.xdg_config_home() / "quickshell/Lute"
+                        link = file.parent / "Lute"
+                        if link.is_symlink() and link.resolve() == lute_folder.resolve():
+                            pass
+                        else:
+                            link.symlink_to(lute_folder, target_is_directory=True)
         # generate every file in quickshell/Lute/... with the required contents
         # Lute/qmldir
         qmldir_path = config.xdg_config_home()/"quickshell"/"Lute"/"qmldir"
@@ -118,7 +142,7 @@ QtObject {{
             else:
                 subprocess.run("qs -c {config} ipc call lute refresh", shell=True)
 
-    def help_install(self) -> None:
+    def help_install(self, ez_mode=False) -> None:
         """ Display help messages to guide the user to installing the plugin
         for the app """ 
-        print("[default]This is the hardest install: you have to make sure that quickshell/Lute is on path AND that at least one config in quickshell/*/shell.qml imports Lute")
+        print("[default]Add `import qs.Lute` in `quickshell/*/shell.qml`, then add a symlink to `quickshell/Lute/` next to `shell.qml`")

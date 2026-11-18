@@ -13,6 +13,10 @@ class Plugin():
         """ Detects if the app is plugged in """
         raise NotImplementedErr
 
+    #def plug_in(self) -> None:
+    #    """ Plugs in the app if it isn't plugged in """
+    # do i need that? idk...
+
     def generate_variables(self, theme: Theme) -> None:
         """ Generates the lute variables in the app's supported format, to be 
         imported at the TOP of a config and used as variables """

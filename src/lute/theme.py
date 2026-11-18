@@ -443,8 +443,8 @@ def resolve_color_references(theme: dict, schema: dict) -> dict:  # func written
                 parent,
                 parent_schema,
             )
-
-            adjustment = -0.1 if value is GenerateTone.DARK else 0.1
+            adj_value = 0.15
+            adjustment = -adj_value if value is GenerateTone.DARK else adj_value
             return generate_tone(base, adjustment)
 
         if isinstance(value, ColorReference):
