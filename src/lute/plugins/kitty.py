@@ -5,7 +5,7 @@ from rich import print
 
 class KittyPlugin(Plugin):
     """ Kitty terminal plugin """
-    dislpay_name = "kitty"
+    display_name = "kitty"
     name = "kitty"
     version = "0.1"
 
@@ -58,7 +58,7 @@ class KittyPlugin(Plugin):
 
 
     def generate_overrides(self, theme) -> None:
-        raise NotImplementedError
+        self.generate_variables(theme)
 
     def refresh(self, quiet=True) -> None:
         if quiet:

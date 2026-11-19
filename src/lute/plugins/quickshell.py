@@ -7,7 +7,7 @@ import json5 as json
 
 class QuickshellPlugin(Plugin):
     """ Plugin for Quickshell toolkit. """
-    dislpay_name = "QuickShell"
+    display_name = "QuickShell"
     name = "quickshell"
     version = "0.0.1"
 
@@ -122,8 +122,7 @@ QtObject {{
     def generate_overrides(self, theme: Theme) -> None:
         """ Generates lute theme-based overrides to import at the BOTTOM of a
         config """
-        print("ez mode is not supported for quickshell yet!")
-        raise NotImplementedError
+        print("[red]EZ mode is not supported for quickshell! (if you use quickshell, you're good enough to use lute variables yourself)")
 
     def refresh(self, quiet=True) -> None:
         """ Refresh the app to apply the config. Should NEVER close and reopen
