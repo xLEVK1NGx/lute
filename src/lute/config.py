@@ -39,6 +39,7 @@ class Config():
 
     @classmethod
     def load(cls) -> "Config":
+        ensure_config()
         loaded = load_config()
         return cls(
             lute_dir = LUTE_DIR,
