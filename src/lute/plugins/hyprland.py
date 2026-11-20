@@ -1,5 +1,6 @@
 import lute.config as config
 from lute.plugins.base import Plugin
+from lute.theme import Theme
 import subprocess
 from rich import print
 

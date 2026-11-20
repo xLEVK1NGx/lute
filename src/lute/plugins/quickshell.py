@@ -1,5 +1,5 @@
 import lute.config as config
-from lute.theme import ThemeNode
+from lute.theme import ThemeNode, Theme
 from lute.plugins.base import Plugin
 import subprocess
 from rich import print

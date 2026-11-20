@@ -164,26 +164,28 @@ def lute_set(theme_name, light_mode=False, dark_mode=False, verbose=False):
     plugins = [plugin_class() for plugin_class in plugin_classes]
 
     for plugin in plugins:
-        if config.enabled_plugins.get(plugin.name, False) and plugin.detect(): 
-            if not plugin.is_plugged_in():
-                if config.ez_mode:
-                    plugin.help_install(ez_mode=True)
-                    plugin.generate_overrides(theme)
-                else:
-                    plugin.help_install(ez_mode=False)
-                    plugin.generate_variables(theme)
+        if not config.enabled_plugins.get(plugin.name, False):
+            continue
+        if not plugin.detect(): 
+            print(f"{plugin.display_name} is not installed!")
+            continue
+        if not plugin.is_plugged_in():
             if config.ez_mode:
-                if verbose:
-                    print(r"[default]Generating ez overrides for [yellow]" + plugin.display_name + r"[default]...")
+                plugin.help_install(ez_mode=True)
                 plugin.generate_overrides(theme)
             else:
-                if verbose:
-                    print(r"[default]Generating values for [yellow]" + plugin.display_name + r"[default]...")
+                plugin.help_install(ez_mode=False)
                 plugin.generate_variables(theme)
-            plugin.refresh()
-
+        if config.ez_mode:
+            if verbose:
+                print(f"[default]Generating ez overrides for [yellow]{plugin.display_name}[/]...")
+            plugin.generate_overrides(theme)
+        else:
+            if verbose:
+                print(f"[default]Generating values for [yellow]{plugin.display_name}[/]...")
+            plugin.generate_variables(theme)
+        plugin.refresh()
     print(r"[default]Done!~ [green]" + theme.metadata.name + r"[default] loaded successfully! :3")
-
 
 def lute_darken():
     """Change the variant of the theme to its darker version (indicated

@@ -1,9 +1,15 @@
-// this is lute's default settings
 {
-	// just the theme (file)name, no ".jsonc"
-	"selected_theme": "default",
-	// ez mode generates overrides for configs. 
-	// without it, the only thing generated is a list of variables/values
-	// for each plugged app.
-	"ez_mode": false
+    // Theme filename without the .jsonc extension.
+    "selected_theme": "default",
+
+    // EZ mode is not fully supported yet, don't try it.
+    "ez_mode": false,
+
+    // Enable plugins for apps you want LUTE to theme.
+    // Of course, an app that's enabled also needs to be installed.
+    "enabled_plugins": {
+        "kitty": false,
+        "hyprland": false,
+        "quickshell": false
+    }
 }

@@ -1,4 +1,5 @@
 import lute.config as config
+from lute.theme import Theme
 
 class Plugin():
     """ Base class for all plugins """
