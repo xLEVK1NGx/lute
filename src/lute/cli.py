@@ -150,9 +150,10 @@ def lute_set(theme_name, verbose=False):
 
     for plugin in plugins:
         if not config.enabled_plugins.get(plugin.name, False):
+            print(f"[red]{plugin.display_name} is turned off in config.")
             continue
         if not plugin.detect(): 
-            print(f"{plugin.display_name} is not installed!")
+            print(f"[red]{plugin.display_name} is not installed!")
             continue
         if not plugin.is_plugged_in():
             plugin.help_install(ez_mode=config.ez_mode)
