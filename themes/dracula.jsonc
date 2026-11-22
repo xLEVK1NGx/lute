@@ -1,0 +1,102 @@
+// Dracula LUTE adaptation. Palette source: https://github.com/dracula/kitty
+// Slightly round corners and thin borders
+{
+    "metadata": {
+        "name": "Dracula",
+        "authors": [
+            "Dracula Theme"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "Dracula palette adapted for LUTE."
+    },
+    "colors": {
+        "palette": {
+            "black": "#21222c",
+            "white": "#f8f8f2",
+            "red": "#ff5555",
+            "orange": "#ffb86c",
+            "yellow": "#f1fa8c",
+            "green": "#50fa7b",
+            "cyan": "#8be9fd",
+            "blue": "#bd93f9",
+            "purple": "#bd93f9",
+            "pink": "#ff79c6",
+            "gray": {
+                "dark": "#44475a",
+                "base": "#6272a4",
+                "light": "#f8f8f2"
+            }
+        },
+        "UI": {
+            "background": "#282a36",
+            "surface": "#44475a",
+            "foreground": "#f8f8f2",
+            "accent": "#bd93f9",
+            "accent_alt": "#ff79c6",
+            "selection": "#44475a",
+            "hover": "#44475a",
+            "overlay": "#21222c",
+            "text": {
+                "base": "#f8f8f2",
+                "muted": "#6272a4",
+                "disabled": "#6272a4",
+                "inverse": "#282a36"
+            },
+            "border": {
+                "base": "#6272a4",
+                "focused": "#bd93f9"
+            }
+        },
+        "semantic": {
+            "info": "#bd93f9",
+            "warning": "#f1fa8c",
+            "error": "#ff5555",
+            "success": "#50fa7b",
+            "feedback": "#6272a4"
+        },
+        "terminal": {
+            "background_opacity": 1,
+            "ansi": {
+                "0": "#21222c",
+                "1": "#ff5555",
+                "2": "#50fa7b",
+                "3": "#f1fa8c",
+                "4": "#bd93f9",
+                "5": "#ff79c6",
+                "6": "#8be9fd",
+                "7": "#f8f8f2",
+                "8": "#6272a4",
+                "9": "#ff6e6e",
+                "10": "#69ff94",
+                "11": "#ffffa5",
+                "12": "#d6acff",
+                "13": "#ff92df",
+                "14": "#a4ffff",
+                "15": "#ffffff"
+            },
+            "foreground": "#f8f8f2",
+            "background": "#282a36",
+            "cursor": "#f8f8f2",
+            "cursor_text": "#282a36",
+            "selection": {
+                "foreground": "#ffffff",
+                "background": "#44475a"
+            },
+            "url": "#8be9fd",
+            "tabs": {
+                "active_background": "#f8f8f2",
+                "active_foreground": "#282a36",
+                "inactive_background": "#6272a4",
+                "inactive_foreground": "#282a36"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "round",
+        "corner_radius": 4,
+	"border_width": 2,
+	"gaps": 4
+    }
+}

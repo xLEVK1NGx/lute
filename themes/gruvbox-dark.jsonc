@@ -1,0 +1,127 @@
+// Gruvbox Dark LUTE adaptation. 
+// Palette source: https://github.com/morhetz/gruvbox
+// Sharp corners, elegant fonts, tries to look "retro".
+{
+    "metadata": {
+        "name": "Gruvbox Dark",
+        "authors": [
+            "morhetz"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "Gruvbox Dark palette adapted for LUTE.",
+        "lighter_ver": "gruvbox-light",
+        "lightest_ver": "gruvbox-light"
+    },
+    "colors": {
+        "palette": {
+            "black": "#282828",
+            "white": "#ebdbb2",
+            "red": "#fb4934",
+            "orange": "#fe8019",
+            "yellow": "#fabd2f",
+            "green": "#b8bb26",
+            "cyan": "#8ec07c",
+            "blue": "#83a598",
+            "purple": "#d3869b",
+            "pink": "#d3869b",
+            "gray": {
+                "dark": "#3c3836",
+                "base": "#928374",
+                "light": "#ebdbb2"
+            }
+        },
+        "UI": {
+            "background": "#282828",
+            "surface": "#3c3836",
+            "foreground": "#ebdbb2",
+            "accent": "#fe8019",
+            "accent_alt": "#fabd2f",
+            "selection": "#3c3836",
+            "hover": "#3c3836",
+            "overlay": "#1d2021",
+            "text": {
+                "base": "#ebdbb2",
+                "muted": "#928374",
+                "disabled": "#928374",
+                "inverse": "#282828"
+            },
+            "border": {
+                "base": "UI.background.light",
+                "focused": "palette.yellow.dark"
+            }
+        },
+        "semantic": {
+            "info": "#83a598",
+            "warning": "#fabd2f",
+            "error": "#fb4934",
+            "success": "#b8bb26",
+            "feedback": "#928374"
+        },
+        "terminal": {
+            "background_opacity": 1,
+            "ansi": {
+                "0": "#282828",
+                "1": "#cc241d",
+                "2": "#98971a",
+                "3": "#d79921",
+                "4": "#458588",
+                "5": "#b16286",
+                "6": "#689d6a",
+                "7": "#a89984",
+                "8": "#928374",
+                "9": "#fb4934",
+                "10": "#b8bb26",
+                "11": "#fabd2d",
+                "12": "#83a598",
+                "13": "#d3869b",
+                "14": "#8ec07c",
+                "15": "#928374"
+            },
+            "foreground": "#ebdbb2",
+            "background": "#282828",
+            "cursor": "#928374",
+            "cursor_text": "#282828",
+            "selection": {
+                "foreground": "#928374",
+                "background": "#3c3836"
+            },
+            "url": "#8ec07c",
+            "tabs": {
+                "active_background": "#fe8019",
+                "active_foreground": "#282828",
+                "inactive_background": "#3c3836",
+                "inactive_foreground": "#ebdbb2"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "sharp",
+        "corner_radius": 0,
+        "gaps": 0,
+        "border_width": 2
+    },
+    "fonts": {
+        "sizes": { "min": 8, "base": 11, "max": 3},
+        "normal": {
+            "family": "Adwaita Mono"
+        },
+        "monospace": {
+            "family": "Linux Libertine Mono O"
+        },
+	"title": {
+		"family": "Linux Libertine"
+	}
+    },
+    "effects": {
+    	"shadows": { "default": {
+		"enabled": false,
+		"range": 10,
+		"offset_x": 10,
+		"offset_y": 10,
+		"color": "#222233aa",
+		"falloff": 1
+	} }
+    }
+}

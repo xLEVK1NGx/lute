@@ -1,0 +1,110 @@
+// LUTE adaptation of Catppuccin Mocha.
+// Palette: https://github.com/catppuccin/palette
+// Aims for a soft rounded look. Use with an anime landscape wallpaper!!
+{
+    "metadata": {
+        "name": "Catppuccin Mocha",
+        "authors": ["Catppuccin Org"],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "The darkest Catppuccin flavor, with cool dark surfaces and pastel accents.",
+        "lightest_ver": "catpuccin-latte",
+        "lighter_ver": "catpuccin-macchiato"
+    },
+
+    "colors": {
+        // LUTE names map to Catppuccin's palette: orange = Peach,
+        // purple = Mauve, cyan = Teal, black = Crust and white = Text.
+        "palette": {
+            "black": "#11111b",
+            "white": "#cdd6f4",
+            "gray": {
+                "dark": "#45475a",  // Surface1
+                "base": "#6c7086",  // Overlay0
+                "light": "#bac2de"  // Subtext1
+            },
+            "red": "#f38ba8",
+            "orange": "#fab387",
+            "yellow": "#f9e2af",
+            "green": "#a6e3a1",
+            "cyan": "#94e2d5",
+            "blue": "#89b4fa",
+            "purple": "#cba6f7",
+            "pink": "#f5c2e7"
+        },
+
+        "UI": {
+            "background": "#1e1e2e",  // Base
+            "surface": "#313244",     // Surface0
+            "foreground": "#cdd6f4",  // Text
+            "accent": "palette.purple",
+            "accent_alt": "#b4befe",  // Lavender
+            "selection": "#f5e0dc",   // Rosewater
+            "hover": "#45475a",       // Surface1
+            "overlay": "#181825",     // Mantle
+            "text": {
+                "base": "#cdd6f4",
+                "muted": "#a6adc8",    // Subtext0
+                "disabled": "#6c7086", // Overlay0
+                "inverse": "#1e1e2e"
+            },
+            "border": {
+                "base": "UI.background.base",
+                "focused": "#b4befe"
+            }
+        },
+
+        "semantic": {
+            "info": "#89b4fa",
+            "warning": "#f9e2af",
+            "error": "#f38ba8",
+            "success": "#a6e3a1",
+            "feedback": "#bac2de"
+        },
+
+        // Indexed ANSI values from the official Catppuccin Kitty Mocha port.
+        "terminal": {
+            "background_opacity": 0.75,
+            "ansi": {
+                "0": "#45475a",
+                "1": "#f38ba8",
+                "2": "#a6e3a1",
+                "3": "#f9e2af",
+                "4": "#89b4fa",
+                "5": "#f5c2e7",
+                "6": "#94e2d5",
+                "7": "#bac2de",
+                "8": "#585b70",
+                "9": "#f38ba8",
+                "10": "#a6e3a1",
+                "11": "#f9e2af",
+                "12": "#89b4fa",
+                "13": "#f5c2e7",
+                "14": "#94e2d5",
+                "15": "#a6adc8"
+            },
+            "foreground": "#cdd6f4",
+            "background": "#1e1e2e",
+            "cursor": "#f5e0dc",
+            "cursor_text": "#1e1e2e",
+            "selection": {
+                "background": "#f5e0dc",
+                "foreground": "#1e1e2e"
+            },
+            "url": "#f5e0dc",
+            "tabs": {
+                "active_background": "#cba6f7",
+                "active_foreground": "#11111b",
+                "inactive_background": "#181825",
+                "inactive_foreground": "#cdd6f4"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "round",
+        "corner_radius": 12,
+	"gaps": 8,
+	"border_width": 3
+    }
+}

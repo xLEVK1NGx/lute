@@ -1,0 +1,113 @@
+// Solarized Dark LUTE adaptation. 
+// Palette source: https://ethanschoonover.com/solarized/
+// Sharp corners idk
+{
+    "metadata": {
+        "name": "Solarized Dark",
+        "authors": [
+            "Ethan Schoonover"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "Solarized Dark palette adapted for LUTE.",
+        "lighter_ver": "solarized-light",
+        "lightest_ver": "solarized-light"
+    },
+    "colors": {
+        "palette": {
+            "black": "#002b36",
+            "white": "#fdf6e3",
+            "red": "#dc322f",
+            "orange": "#cb4b16",
+            "yellow": "#b58900",
+            "green": "#859900",
+            "cyan": "#2aa198",
+            "blue": "#268bd2",
+            "purple": "#6c71c4",
+            "pink": "#d33682",
+            "gray": {
+                "dark": "#073642",
+                "base": "#586e75",
+                "light": "#839496"
+            }
+        },
+        "UI": {
+            "background": "#002b36",
+            "surface": "#073642",
+            "foreground": "#839496",
+            "accent": "#268bd2",
+            "accent_alt": "#2aa198",
+            "selection": "#073642",
+            "hover": "#073642",
+            "overlay": "#073642",
+            "text": {
+                "base": "#839496",
+                "muted": "#586e75",
+                "disabled": "#586e75",
+                "inverse": "#002b36"
+            },
+            "border": {
+                "base": "#586e75",
+                "focused": "#268bd2"
+            }
+        },
+        "semantic": {
+            "info": "#268bd2",
+            "warning": "#b58900",
+            "error": "#dc322f",
+            "success": "#859900",
+            "feedback": "#586e75"
+        },
+        "terminal": {
+            "background_opacity": 1,
+            "ansi": {
+                "0": "#073642",
+                "1": "#dc322f",
+                "2": "#859900",
+                "3": "#b58900",
+                "4": "#268bd2",
+                "5": "#d33682",
+                "6": "#2aa198",
+                "7": "#eee8d5",
+                "8": "#002b36",
+                "9": "#cb4b16",
+                "10": "#586e75",
+                "11": "#657b83",
+                "12": "#839496",
+                "13": "#6c71c4",
+                "14": "#93a1a1",
+                "15": "#fdf6e3"
+            },
+            "foreground": "#839496",
+            "background": "#002b36",
+            "cursor": "#839496",
+            "cursor_text": "#002b36",
+            "selection": {
+                "foreground": "#839496",
+                "background": "#073642"
+            },
+            "url": "#2aa198",
+            "tabs": {
+                "active_background": "#268bd2",
+                "active_foreground": "#002b36",
+                "inactive_background": "#073642",
+                "inactive_foreground": "#839496"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "sharp",
+        "corner_radius": 2,
+	"border_width": 3, 
+	"gaps": 20
+    },
+    "fonts": {
+        "sizes": { "min": 8, "base": 11, "max": 3},
+	"normal": {"family": "Noto Serif"},
+	"monospace": {"family": "DejaVu Sans Mono"},
+	"title": {
+		"family": "Linux Libertine"
+	}
+    }
+}

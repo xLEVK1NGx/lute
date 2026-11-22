@@ -1,0 +1,105 @@
+// LUTE adaptation of Catppuccin Latte.
+// Palette: https://github.com/catppuccin/palette
+// Aims for a soft rounded look. Use with an anime landscape wallpaper!!
+{
+    "metadata": {
+        "name": "Catppuccin Latte",
+        "authors": [
+            "Catppuccin Org"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "light",
+        "description": "Catppuccin Latte flavor adapted for LUTE.",
+        "darker_ver": "catpuccin-frappe",
+        "darkest_ver": "catpuccin-mocha"
+    },
+    "colors": {
+        "palette": {
+            "black": "#dce0e8",
+            "white": "#4c4f69",
+            "gray": {
+                "dark": "#bcc0cc",
+                "base": "#9ca0b0",
+                "light": "#5c5f77"
+            },
+            "red": "#d20f39",
+            "orange": "#fe640b",
+            "yellow": "#df8e1d",
+            "green": "#40a02b",
+            "cyan": "#179299",
+            "blue": "#1e66f5",
+            "purple": "#8839ef",
+            "pink": "#ea76cb"
+        },
+        "UI": {
+            "background": "#eff1f5",
+            "surface": "#ccd0da",
+            "foreground": "#4c4f69",
+            "accent": "palette.purple",
+            "accent_alt": "#7287fd",
+            "selection": "#dc8a78",
+            "hover": "#bcc0cc",
+            "overlay": "#e6e9ef",
+            "text": {
+                "base": "#4c4f69",
+                "muted": "#6c6f85",
+                "disabled": "#9ca0b0",
+                "inverse": "#eff1f5"
+            },
+            "border": {
+                "base": "#9ca0b0",
+                "focused": "#7287fd"
+            }
+        },
+        "semantic": {
+            "info": "palette.blue.base",
+            "warning": "palette.yellow.base",
+            "error": "palette.red.base",
+            "success": "palette.green.base",
+            "feedback": "#5c5f77"
+        },
+        "terminal": {
+            "background_opacity": 0.75,
+            "ansi": {
+                "0": "#5c5f77",
+                "1": "#d20f39",
+                "2": "#40a02b",
+                "3": "#df8e1d",
+                "4": "#1e66f5",
+                "5": "#ea76cb",
+                "6": "#179299",
+                "7": "#acb0be",
+                "8": "#6c6f85",
+                "9": "#de293e",
+                "10": "#49af3d",
+                "11": "#eea02d",
+                "12": "#456eff",
+                "13": "#fe85d8",
+                "14": "#2d9fa8",
+                "15": "#bcc0cc"
+            },
+            "foreground": "#4c4f69",
+            "background": "#eff1f5",
+            "cursor": "#dc8a78",
+            "cursor_text": "#eff1f5",
+            "selection": {
+                "background": "#dc8a78",
+                "foreground": "#eff1f5"
+            },
+            "url": "#dc8a78",
+            "tabs": {
+                "active_background": "#8839ef",
+                "active_foreground": "#eff1f5",
+                "inactive_background": "#9ca0b0",
+                "inactive_foreground": "#4c4f69"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "round",
+        "corner_radius": 12,
+	"gaps": 8,
+	"border_width": 3
+    }
+}

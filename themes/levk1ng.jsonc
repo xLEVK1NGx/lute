@@ -1,0 +1,147 @@
+// Orange-central cyberpunkish theme.
+// Beveled corners, neon colors, main accent is orange
+// Made by LUTE creator LEVK1NG
+{
+    "metadata": {
+        "name": "LEVK1NG's theme",
+        "authors": [
+            "levk1ng"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "Theme designed and used by LEVK1NG, creator of LUTE."
+    },
+    "colors": {
+        "palette": {
+            "black": "#000000",
+            "white": "#ffffff",
+            "gray": {
+                "dark": "#20201a",
+                "base": "#707070",
+                "light": "#dddddd"
+            },
+            "red": {
+                "base": "#e7024e",
+                "light": "#ff004e"
+            },
+            "orange": {
+                "base": "#ff812e",
+                "dark": "#f94e15",
+                "light": "#ff770a"
+            },
+            "yellow": {
+                "base": "#e5e34f",
+                "light": "#ffd700"
+            },
+            "green": {
+                "base": "#05e06f",
+                "light": "#05ff66"
+            },
+            "cyan": {
+                "base": "#01dbdb",
+                "light": "#00ffff"
+            },
+            "blue": {
+                "base": "#3838ff",
+                "light": "#0033ff"
+            },
+            "purple": {
+                "base": "#a855ff",
+                "light": "#c080ff"
+            },
+            "pink": {
+                "base": "#ec4cc6",
+                "light": "#e137f0"
+            }
+        },
+        "UI": {
+            "background": {
+                "base": "#181813",
+                "dark": "#10100d",
+                "light": "#20201a"
+            },
+            "surface": "palette.gray.dark",
+            "foreground": "palette.gray.light",
+            "accent": "palette.orange",
+            "accent_alt": "palette.orange.dark",
+            "selection": "palette.orange.base",
+            "hover": "palette.orange.light",
+            "overlay": "#151512",
+            "text": {
+                "base": "palette.gray.light",
+                "muted": "palette.gray.base",
+                "disabled": "palette.gray.base",
+                "inverse": "UI.background.base"
+            },
+            "border": {
+                "base": "UI.background.base",
+                "focused": "palette.orange.dark"
+            }
+        },
+        "semantic": {
+            "info": "palette.cyan.base",
+            "warning": "palette.orange.base",
+            "error": "palette.red.base",
+            "success": "palette.green.base",
+            "feedback": "palette.gray.light"
+        },
+        "terminal": {
+            "background_opacity": 0.8,
+            "ansi": {
+                "0": "palette.black",
+                "1": "palette.red.base",
+                "2": "palette.green.base",
+                "3": "palette.yellow.base",
+                "4": "palette.blue.base",
+                "5": "palette.pink.base",
+                "6": "palette.cyan.base",
+                "7": "palette.gray.light",
+                "8": "palette.gray.base",
+                "9": "palette.red.light",
+                "10": "palette.green.light",
+                "11": "palette.orange.light",
+                "12": "palette.blue.light",
+                "13": "palette.pink.light",
+                "14": "palette.cyan.light",
+                "15": "palette.white"
+            },
+            "foreground": "palette.gray.light",
+            "background": "terminal.ansi.0"
+        }
+    },
+    "geometry": {
+        "corner_shape": "beveled",
+        "corner_radius": 16,
+	"border_width": 2,
+	"gaps": {
+		"inner": 8,
+		"outer": 8
+	}
+    },
+    "fonts": {
+        "sizes": {
+            "min": 10,
+            "base": 11,
+            "max": 18
+        },
+        "normal":    { "family": "CodeNewRoman Nerd Font Propo" },
+        "title":     { "family": "Ndot 57" },
+	"monospace": { "family": "CodeNewRoman Nerd Font" }
+    },
+    "effects": {
+	    "shadows": {"default": {
+	    	"enabled": true,
+		"range": 3,
+		"offset_x": 10,
+		"offset_y": 10,
+		"color": "#222233aa"
+	    } },
+	    "blur": {"default":{ 
+		"enabled": false,
+		"size": 3,
+		"passes": 2,
+		"noise": 0.1,
+	    } }
+    }
+}

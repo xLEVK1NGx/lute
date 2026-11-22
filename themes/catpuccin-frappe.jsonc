@@ -1,0 +1,107 @@
+// LUTE adaptation of Catppuccin Frappe.
+// Palette: https://github.com/catppuccin/palette
+// Aims for a soft rounded look. Use with an anime landscape wallpaper!!
+{
+    "metadata": {
+        "name": "Catppuccin Frappé",
+        "authors": [
+            "Catppuccin Org"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "Catppuccin Frappe flavor adapted for LUTE.",
+        "lightest_ver": "catpuccin-latte",
+        "lighter_ver": "catpuccin-latte",
+        "darker_ver": "catpuccin-macchiato",
+        "darkest_ver": "catpuccin-mocha"
+    },
+    "colors": {
+        "palette": {
+            "black": "#232634",
+            "white": "#c6d0f5",
+            "gray": {
+                "dark": "#51576d",
+                "base": "#737994",
+                "light": "#b5bfe2"
+            },
+            "red": "#e78284",
+            "orange": "#ef9f76",
+            "yellow": "#e5c890",
+            "green": "#a6d189",
+            "cyan": "#81c8be",
+            "blue": "#8caaee",
+            "purple": "#ca9ee6",
+            "pink": "#f4b8e4"
+        },
+        "UI": {
+            "background": "#303446",
+            "surface": "#414559",
+            "foreground": "#c6d0f5",
+            "accent": "palette.purple",
+            "accent_alt": "#babbf1",
+            "selection": "#f2d5cf",
+            "hover": "#51576d",
+            "overlay": "#292c3c",
+            "text": {
+                "base": "#c6d0f5",
+                "muted": "#a5adce",
+                "disabled": "#737994",
+                "inverse": "#303446"
+            },
+            "border": {
+                "base": "#737994",
+                "focused": "#babbf1"
+            }
+        },
+        "semantic": {
+            "info": "palette.blue.base",
+            "warning": "palette.yellow.base",
+            "error": "palette.red.base",
+            "success": "palette.green.base",
+            "feedback": "#b5bfe2"
+        },
+        "terminal": {
+            "background_opacity": 0.75,
+            "ansi": {
+                "0": "#51576d",
+                "1": "#e78284",
+                "2": "#a6d189",
+                "3": "#e5c890",
+                "4": "#8caaee",
+                "5": "#f4b8e4",
+                "6": "#81c8be",
+                "7": "#a5adce",
+                "8": "#626880",
+                "9": "#e67172",
+                "10": "#8ec772",
+                "11": "#d9ba73",
+                "12": "#7b9ef0",
+                "13": "#f2a4db",
+                "14": "#5abfb5",
+                "15": "#b5bfe2"
+            },
+            "foreground": "#c6d0f5",
+            "background": "#303446",
+            "cursor": "#f2d5cf",
+            "cursor_text": "#303446",
+            "selection": {
+                "background": "#f2d5cf",
+                "foreground": "#303446"
+            },
+            "url": "#f2d5cf",
+            "tabs": {
+                "active_background": "#ca9ee6",
+                "active_foreground": "#232634",
+                "inactive_background": "#292c3c",
+                "inactive_foreground": "#c6d0f5"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "round",
+        "corner_radius": 12,
+	"gaps": 8,
+	"border_width": 3
+    }
+}

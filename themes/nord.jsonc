@@ -1,0 +1,108 @@
+// Nord LUTE adaptation.
+// Palette source: https://github.com/nordtheme/xresources
+// It's just nord
+{
+    "metadata": {
+        "name": "Nord",
+        "authors": [
+            "Sven Greb / Nord"
+        ],
+        "theme_version": "1.0.0",
+        "lute_version": "1.0.0",
+        "variant": "dark",
+        "description": "Nord palette adapted for LUTE."
+    },
+    "colors": {
+        "palette": {
+            "black": "#2e3440",
+            "white": "#eceff4",
+            "red": "#bf616a",
+            "orange": "#d08770",
+            "yellow": "#ebcb8b",
+            "green": "#a3be8c",
+            "cyan": "#8fbcbb",
+            "blue": "#81a1c1",
+            "purple": "#b48ead",
+            "pink": "#b48ead",
+            "gray": {
+                "dark": "#3b4252",
+                "base": "#4c566a",
+                "light": "#d8dee9"
+            }
+        },
+        "UI": {
+            "background": "#2e3440",
+            "surface": "#3b4252",
+            "foreground": "#d8dee9",
+            "accent": "#88c0d0",
+            "accent_alt": "#81a1c1",
+            "selection": "#434c5e",
+            "hover": "#3b4252",
+            "overlay": "#434c5e",
+            "text": {
+                "base": "#d8dee9",
+                "muted": "#4c566a",
+                "disabled": "#4c566a",
+                "inverse": "#2e3440"
+            },
+            "border": {
+                "base": "#4c566a",
+                "focused": "#88c0d0"
+            }
+        },
+        "semantic": {
+            "info": "#81a1c1",
+            "warning": "#ebcb8b",
+            "error": "#bf616a",
+            "success": "#a3be8c",
+            "feedback": "#4c566a"
+        },
+        "terminal": {
+            "background_opacity": 1,
+            "ansi": {
+                "0": "#3b4252",
+                "1": "#bf616a",
+                "2": "#a3be8c",
+                "3": "#ebcb8b",
+                "4": "#81a1c1",
+                "5": "#b48ead",
+                "6": "#88c0d0",
+                "7": "#e5e9f0",
+                "8": "#4c566a",
+                "9": "#bf616a",
+                "10": "#a3be8c",
+                "11": "#ebcb8b",
+                "12": "#81a1c1",
+                "13": "#b48ead",
+                "14": "#8fbcbb",
+                "15": "#eceff4"
+            },
+            "foreground": "#d8dee9",
+            "background": "#2e3440",
+            "cursor": "#d8dee9",
+            "cursor_text": "#2e3440",
+            "selection": {
+                "foreground": "#d8dee9",
+                "background": "#434c5e"
+            },
+            "url": "#8fbcbb",
+            "tabs": {
+                "active_background": "#88c0d0",
+                "active_foreground": "#2e3440",
+                "inactive_background": "#3b4252",
+                "inactive_foreground": "#d8dee9"
+            }
+        }
+    },
+    "geometry": {
+        "corner_shape": "round",
+        "corner_radius": 10,
+	"border_width": 3,
+	"gaps": {"inner": 6, "outer": 12}
+    },
+    "fonts": {
+        "sizes": { "min": 8, "base": 11, "max": 3},
+	"normal": {"family": "DejaVu Serif"},
+	"monospace": {"family": "DejaVu Sans Mono"},
+    }
+}
