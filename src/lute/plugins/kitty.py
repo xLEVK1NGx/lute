@@ -8,7 +8,7 @@ class KittyPlugin(Plugin):
     """ Kitty terminal plugin """
     display_name = "kitty"
     name = "kitty"
-    version = "0.1"
+    version = "1.0.0"
 
 
     def detect(self) -> bool:

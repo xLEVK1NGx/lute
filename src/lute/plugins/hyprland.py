@@ -8,7 +8,7 @@ class HyprlandPlugin(Plugin):
     """ Plugin for Hyprland WL compositor """
     display_name = "Hyprland"
     name = "hyprland"
-    version = "0.0.1"
+    version = "1.0.0"
 
     def detect(self) -> bool:
         """ Detects whether the app is installed """
@@ -75,7 +75,7 @@ lute_border_inactive_dark = "{ui.border.base.dark}"
 {palette_strs}
 
 -- corners
-lute_rounding = {str(rounding).lower().lower())}
+lute_rounding = {str(rounding).lower()}
 
 -- borders
 lute_rounding_power = {rounding_power}
@@ -90,7 +90,7 @@ lute_blur_enabled = {str(fx.blur.window_bg.enabled).lower()}
 lute_blur_size = {fx.blur.window_bg.size}
 lute_blur_passes = {fx.blur.window_bg.passes}
 lute_blur_vibrancy = {1 - fx.blur.window_bg.noise}
-lute_blur_popups = {fx.blur.wallpaper.enabled}
+lute_blur_popups = {str(fx.blur.wallpaper.enabled).lower()}
 
 -- shadow
 lute_shadow_enabled = {str(fx.shadows.window_bg.enabled).lower()}

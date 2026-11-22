@@ -9,7 +9,7 @@ class QuickshellPlugin(Plugin):
     """ Plugin for Quickshell toolkit. """
     display_name = "QuickShell"
     name = "quickshell"
-    version = "0.0.1"
+    version = "1.0.0"
 
     def detect(self) -> bool:
         """ Detects whether the app is installed """
@@ -19,7 +19,7 @@ class QuickshellPlugin(Plugin):
 
     def is_plugged_in(self) -> bool:
         """ Detects if the app is plugged in """
-        path = config.xdg_config_home() / "quickshell"
+        path = config.xdg_config_home() / "quickshell/Lute"
         if not path.is_dir():
             return False
 
@@ -43,7 +43,7 @@ class QuickshellPlugin(Plugin):
         """ Generates the lute variables in the app's supported format, to be 
         imported at the TOP of a config and used as variables """
         # generate symlinks for the core module
-        path = config.xdg_config_home() / "quickshell"
+        path = config.xdg_config_home() / "quickshell/Lute"
         if not path.is_dir():
             path.mkdir(parents=True, exist_ok=True)
 

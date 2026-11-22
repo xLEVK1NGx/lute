@@ -7,7 +7,7 @@ import pkgutil
 from rich import print
 from lute.config import Config
 from lute.plugins.base import Plugin
-from lute.theme import Theme
+from lute.theme import *
 import lute.plugins
 import os
 import subprocess
@@ -37,10 +37,10 @@ def main():
 
     elif ((argc == 2 and argv[1] == "list")     or
           (argc == 3 and argv[1] == "list" and argv[2] == "themes")):
-        lute_list_themes(autocompletion=True)
+        lute_list_themes()
 
     elif argc == 4 and argv[1] == "list" and argv[2] == "themes" and argv[3] == "autocompletion":
-        lute_list_themes()
+        lute_list_themes(autocompletion=True)
 
     elif argv[1] == "set":
         if argc == 3:
@@ -56,6 +56,9 @@ def main():
         lute_light()
     elif argv[1] == "dark":
         lute_dark()
+
+    elif argc == 2 and argv[1] == "commands":
+        lute_commands()
 
 def lute_help():
     """Explain the program's purpose and list commands."""
@@ -74,10 +77,8 @@ def lute_help():
 
 [green]lute refresh \[app] [/]
     [default]refresh all lute-supported apps to apply theme. The [app] argument refreshes a specific app, e.g. hyprland. [/]
-
-[green]lute try \[theme] [/]
-    [default]"try on" a theme. is faster than 'set' but potentially has bugs and/or other issues. [/]
-
+""")
+future = """
 [green]lute apps [/]
     [default]list all apps supported by lute, and whether they are installed and plugged in [/]
 
@@ -94,14 +95,14 @@ def lute_help():
     [default]if given a theme name, will try to find a theme with this name in LUTE's official repo and install it.
     if given a url, will install the theme from there. (warning: file MUST be prefixed with 'lute-', for example 'lute-nord.jsonc') [/]
 
-""")
+"""
 
 
 def lute_list_themes(want_return = False, autocompletion = False):
     """List installed themes. """
     # TODO: basic info about them in a table with:
     # Name, Description, Main Color, Tags
-
+    lute.theme.ensure_themes_path(config)
     result = subprocess.run(f"ls {config.themes_dir} | awk -F '.jsonc' '{{print $1}}'", 
                             shell=True, 
                             capture_output=True, 
@@ -280,12 +281,21 @@ def lute_install(theme_or_url):
     """
     pass
 
+def lute_commands():
+    """ list available commands for tab completion """
+    print("""
+list
+set
+darken
+lighten
+dark
+light
+refresh
+          """)
 
 
-
-
-
-# for salut a tous c lasalle in range gtaVI
+# easter egg from wetsake :3
+# for salut_a_tous_c_lasalle in range(gtaVI)
 
 
 

@@ -29,13 +29,13 @@ def load_jsonc(path) -> dict:
     except ValueError as e:
         print("[red]Invalid jsonc file!")
         print(e)
-        sys.exit()
+        sys.exit(1)
 
 def remove_requireds(data: dict):
     """ Helper func to remove all "required" fields from a json schema """
     if isinstance(data, dict):
         data.pop("required", None)
-        data.pop("dependentRequired")
+        data.pop("dependentRequired", None)
         for value in data.values():
             remove_requireds(value)
     elif isinstance(data, list):
@@ -53,7 +53,7 @@ def load_jsonc_req(path: Path) -> dict:
     except schemaexceptions.ValidationError as e:
         print("[red]The file isn't a valid LUTE theme!")
         print(e)
-        sys.exit()
+        sys.exit(1)
     return theme_data
 
 def load_jsonc_noreq(path) -> dict:
