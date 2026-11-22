@@ -137,9 +137,9 @@ QtObject {{
                         check=True).stdout.splitlines()
         for config in loaded_configs:
             if quiet:
-                subprocess.run("qs -c {config} ipc call lute refresh > /dev/null 2>&1", shell=True)
+                subprocess.run(f"qs -c {config} ipc call lute refresh > /dev/null 2>&1", shell=True)
             else:
-                subprocess.run("qs -c {config} ipc call lute refresh", shell=True)
+                subprocess.run(f"qs -c {config} ipc call lute refresh", shell=True)
 
     def help_install(self, ez_mode=False) -> None:
         """ Display help messages to guide the user to installing the plugin

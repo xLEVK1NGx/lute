@@ -35,11 +35,11 @@ def main():
         lute_help()
         return
 
-    elif ((argc == 2 and argv[1] == "list") or 
-          (argc == 3 and argv[1] == "list" and argv[2] == "themes") or 
-          (argc == 4 and argv[1] == "list" and argv[2] == "themes" and argv[3] == "autocompletion")):
+    elif ((argc == 2 and argv[1] == "list")     or
+          (argc == 3 and argv[1] == "list" and argv[2] == "themes")):
         lute_list_themes(autocompletion=True)
-        return
+
+    elif argc == 4 and argv[1] == "list" and argv[2] == "themes" and argv[3] == "autocompletion":
         lute_list_themes()
 
     elif argv[1] == "set":

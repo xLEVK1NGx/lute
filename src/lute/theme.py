@@ -12,7 +12,16 @@ from rich import print
 import subprocess
 import sys
 
-# functions to load jsonc files and such
+# ensure that the themes directory exists
+
+def ensure_themes_path():
+    themes_dir = config.lute_dir / "themes"
+    if not CONFIG_FILE.exists():
+        LUTE_DIR.mkdir(parents=True, exist_ok=True)
+        src = files("lute").joinpath("config.jsonc")
+        CONFIG_FILE.write_text(src.read_text())
+
+# helper functions to load jsonc files and such
 
 def load_jsonc(path) -> dict:
     """ Returns a dict with all the data from the specified jsonc file """
@@ -577,6 +586,7 @@ class ThemeNode:
 class Theme(ThemeNode):
     @classmethod
     def load_full(cls) -> "Theme":
+        ensure_themes_path()
         config = Config.load()
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)
@@ -616,9 +626,10 @@ class Theme(ThemeNode):
             final_dict = final_normalization(final_dict, schema, schema)
 
             return cls(final_dict)
-    
+
     @classmethod
     def load_file(cls) -> "Theme":
+        ensure_themes_path()
         config = Config.load()
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)

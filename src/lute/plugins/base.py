@@ -13,7 +13,7 @@ class Plugin():
 
     def is_plugged_in(self) -> bool:
         """ Detects if the app is plugged in """
-        raise NotImplementedErr
+        raise NotImplementedError
 
     def generate_variables(self, theme: Theme) -> None:
         """ Generates the lute variables in the app's supported format, to be 
