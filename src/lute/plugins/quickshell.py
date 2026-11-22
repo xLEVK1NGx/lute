@@ -63,6 +63,7 @@ class QuickshellPlugin(Plugin):
         # generate every file in quickshell/Lute/... with the required contents
         # Lute/qmldir
         qmldir_path = config.xdg_config_home()/"quickshell"/"Lute"/"qmldir"
+        qmldir_path.parent.mkdir(parents=True, exist_ok=True)
         with qmldir_path.open("w", encoding="utf-8") as qmldir:
             qmldir.write("""module Lute
 singleton Lute 1.0 Lute.qml""")
