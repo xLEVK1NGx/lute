@@ -74,11 +74,11 @@ def lute_help():
 
 [green]lute dark / lute light [/]
     [default]switch the theme to light / dark mode [/]
+""")
 
+    future = r"""
 [green]lute refresh \[app] [/]
     [default]refresh all lute-supported apps to apply theme. The [app] argument refreshes a specific app, e.g. hyprland. [/]
-""")
-future = """
 [green]lute apps [/]
     [default]list all apps supported by lute, and whether they are installed and plugged in [/]
 
@@ -93,10 +93,7 @@ future = """
 
 [green]lute install \[theme / url] [/]
     [default]if given a theme name, will try to find a theme with this name in LUTE's official repo and install it.
-    if given a url, will install the theme from there. (warning: file MUST be prefixed with 'lute-', for example 'lute-nord.jsonc') [/]
-
-"""
-
+    if given a url, will install the theme from there. (warning: file MUST be prefixed with 'lute-', for example 'lute-nord.jsonc') [/] """
 
 def lute_list_themes(want_return = False, autocompletion = False):
     """List installed themes. """
@@ -131,7 +128,7 @@ def lute_set(theme_name, verbose=False):
     else:
         if verbose:
             print(r"[red]You don't have this theme installed!")
-        return 1
+        sys.exit(1)
 
     theme = Theme.load_full(theme_name)
 
@@ -290,7 +287,6 @@ darken
 lighten
 dark
 light
-refresh
           """)
 
 

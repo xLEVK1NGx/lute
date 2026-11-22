@@ -19,21 +19,20 @@ class QuickshellPlugin(Plugin):
 
     def is_plugged_in(self) -> bool:
         """ Detects if the app is plugged in """
-        path = config.xdg_config_home() / "quickshell/Lute"
+        path = config.xdg_config_home() / "quickshell"
         if not path.is_dir():
             return False
 
-        for file in path.iterdir():
+        for dir in path.iterdir():
         # make sure that at least one config in qs/*/shell.qml imports Lute module
-            file = file / "shell.qml"
+            file = dir / "shell.qml"
             if not file.is_file():
                 continue
             with file.open(encoding="utf-8") as qs_conf:
                 for line in qs_conf:
                     if line.strip() == "import qs.Lute":
                     # check for a lute symlink in every config that imports Lute
-                        folder = file.parent
-                        lute_folder = config.xdg_config_home() / "quickshell/Lute"
+                        lute_folder = path / "Lute"
                         link = file.parent / "Lute"
                         if link.is_symlink() and link.resolve() == lute_folder.resolve():
                             return True

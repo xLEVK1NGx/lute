@@ -18,6 +18,8 @@ class KittyPlugin(Plugin):
 
     def is_plugged_in(self) -> bool:
         path = config.xdg_config_home() / "kitty" / "kitty.conf"
+        if not path.exists():
+            return False
         with path.open(encoding="utf-8") as kitty_config:
             for line in kitty_config:
                 if line.strip() == 'include lute-generated.conf':
