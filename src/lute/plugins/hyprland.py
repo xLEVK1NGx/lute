@@ -20,6 +20,7 @@ class HyprlandPlugin(Plugin):
     def is_plugged_in(self) -> bool:
         """ Detects if the app is plugged in """
         path = config.xdg_config_home() / "hypr" / "hyprland.lua"
+        path.parent.mkdir(parents=True, exist_ok=True)
         if not path.exists():
             return False
         with path.open(encoding="utf-8") as hypr_conf:
@@ -197,6 +198,6 @@ hl.config({{
         """ Display help messages to guide the user to installing the plugin
         for the app """ 
         if ez_mode:
-            print(r"""[default]To plug in hyprland you need to add [yellow]'require("lute-generated.lua")'[/] to the BOTTOM of your hyprland.lua. Any other files [yellow]require()[/]'d afterwards will have access to lute variables from this file.""")
+            print(r"""[default]To plug in hyprland you need to add [yellow]'require("lute-generated")'[/] to the BOTTOM of your hyprland.lua. Any other files [yellow]require()[/]'d afterwards will have access to lute variables from this file.""")
         else:
-            print(r"""[default]To plug in hyprland you need to add [yellow]'require("lute-generated.lua")'[/] to the TOP of your hyprland.lua. Any other files [yellow]require()[/]'d afterwards will have access to lute variables from this file.""")
+            print(r"""[default]To plug in hyprland you need to add [yellow]'require("lute-generated")'[/] to the TOP of your hyprland.lua. Any other files [yellow]require()[/]'d afterwards will have access to lute variables from this file.""")

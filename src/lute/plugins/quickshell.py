@@ -42,7 +42,7 @@ class QuickshellPlugin(Plugin):
         """ Generates the lute variables in the app's supported format, to be 
         imported at the TOP of a config and used as variables """
         # generate symlinks for the core module
-        path = config.xdg_config_home() / "quickshell/Lute"
+        path = config.xdg_config_home() / "quickshell"
         if not path.is_dir():
             path.mkdir(parents=True, exist_ok=True)
 
@@ -54,7 +54,6 @@ class QuickshellPlugin(Plugin):
                 for line in qs_conf:
                     if line.strip() == "import qs.Lute":
                     # check for a lute symlink in every config that imports Lute
-                        folder = file.parent
                         lute_folder = config.xdg_config_home() / "quickshell/Lute"
                         link = file.parent / "Lute"
                         if link.is_symlink() and link.resolve() == lute_folder.resolve():
@@ -68,6 +67,7 @@ class QuickshellPlugin(Plugin):
             qmldir.write("""module Lute
 singleton Lute 1.0 Lute.qml""")
         #Lute/Lute.qml
+
         def recursive_dict_conversion(value):
             if isinstance(value, ThemeNode):
                 return {
@@ -118,6 +118,7 @@ QtObject {{
     }}
 }}
 """)
+
     def generate_overrides(self, theme: Theme) -> None:
         """ Generates lute theme-based overrides to import at the BOTTOM of a
         config """

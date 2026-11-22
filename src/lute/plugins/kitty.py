@@ -28,6 +28,7 @@ class KittyPlugin(Plugin):
 
     def generate_variables(self, theme) -> None:
         path = config.xdg_config_home() / "kitty" / "lute-generated.conf"
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w", encoding="utf-8") as lgf: #lgf = Lute-Generated File
             term = theme.colors.terminal
             font = theme.fonts
