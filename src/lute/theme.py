@@ -14,7 +14,7 @@ import sys
 
 # ensure that the themes directory exists
 
-def ensure_themes_path():
+def ensure_themes_path(config):
     themes_dir = config.lute_dir / "themes"
     if not CONFIG_FILE.exists():
         LUTE_DIR.mkdir(parents=True, exist_ok=True)
@@ -586,8 +586,8 @@ class ThemeNode:
 class Theme(ThemeNode):
     @classmethod
     def load_full(cls) -> "Theme":
-        ensure_themes_path()
         config = Config.load()
+        ensure_themes_path(config)
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)
 
