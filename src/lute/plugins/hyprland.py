@@ -36,12 +36,12 @@ class HyprlandPlugin(Plugin):
             ui = theme.colors.UI
             font = theme.fonts
             fx = theme.effects
-            # calculation of the 'roudning' field.
+            # calculation of the 'rounding' field.
             rounding = False if geo.corner_shape == "sharp" else sum(geo.corner_radius)//4
             # rounding power calculation for corner shapes
             rounding_power = 1
             if geo.corner_shape == "beveled":
-                roudning_power = 1
+                rounding_power = 1
             else:
                 rounding_power = 2
             # list of palette colors with light, base, dark shades
@@ -75,7 +75,7 @@ lute_border_inactive_dark = "{ui.border.base.dark}"
 {palette_strs}
 
 -- corners
-lute_rounding = {rounding}
+lute_rounding = {str(rounding).lower().lower())}
 
 -- borders
 lute_rounding_power = {rounding_power}

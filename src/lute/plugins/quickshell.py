@@ -45,7 +45,7 @@ class QuickshellPlugin(Plugin):
         # generate symlinks for the core module
         path = config.xdg_config_home() / "quickshell"
         if not path.is_dir():
-            return False
+            path.mkdir(parents=True, exist_ok=True)
 
         for file in path.iterdir():
             file = file / "shell.qml"

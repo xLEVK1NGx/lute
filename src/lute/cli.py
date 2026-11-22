@@ -98,9 +98,9 @@ def lute_help():
 
 
 def lute_list_themes(want_return = False, autocompletion = False):
-    """List installed themes.
-    TODO: basic info about them in a table with:
-    Name, Description, Main Color, Tags"""
+    """List installed themes. """
+    # TODO: basic info about them in a table with:
+    # Name, Description, Main Color, Tags
 
     result = subprocess.run(f"ls {config.themes_dir} | awk -F '.jsonc' '{{print $1}}'", 
                             shell=True, 
@@ -122,30 +122,17 @@ def lute_list_themes(want_return = False, autocompletion = False):
             print("[default]" + el + "[/]")
 
 
-def lute_set(theme_name, light_mode=False, dark_mode=False, verbose=False):
-    """Set theme to theme_name.jsonc. This implies:
-        1. for each supported app, export a 'lute-generated.(some extension)' file,
-           where the extension can be anything from lua (Hyprland) to json
-           (FastFetch?) or qml (quickshell)
-        2. launch commands to "refresh" said apps, e.g. `hyprctl reload`
-           or `qs refresh-config`
-
-    The arguments will be added with luted, to manage light/dark mode on
-    the desktop. "Which mode to use" is 'calculated' by luted, "SWITCH TO
-    DARK MODE NOW" is lute's work.
-    """
+def lute_set(theme_name, verbose=False):
+    """Set theme to theme_name.jsonc. """
     global config
-    old_theme = config.selected_theme
-    config.select_theme(theme_name)
-    if config.selected_theme in lute_list_themes(want_return=True):
+    if theme_name in lute_list_themes(want_return=True, autocompletion=True):
         print(r"Loading [yellow]" + theme_name + r".jsonc[default]...")
     else:
         if verbose:
             print(r"[red]You don't have this theme installed!")
-        config.select_theme(old_theme)
         return 1
 
-    theme = Theme.load_full()
+    theme = Theme.load_full(theme_name)
 
     plugin_classes = []
 
@@ -179,6 +166,7 @@ def lute_set(theme_name, light_mode=False, dark_mode=False, verbose=False):
             if verbose: print(f"[default]Generating values for [yellow]{plugin.display_name}[/]...")
             plugin.generate_variables(theme)
         plugin.refresh()
+    config.select_theme(theme_name)
     print(r"[default]Done!~ [green]" + theme.metadata.name + r"[default] loaded successfully! :3")
 
 def lute_darken():

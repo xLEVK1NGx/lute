@@ -16,10 +16,8 @@ import sys
 
 def ensure_themes_path(config):
     themes_dir = config.lute_dir / "themes"
-    if not CONFIG_FILE.exists():
-        LUTE_DIR.mkdir(parents=True, exist_ok=True)
-        src = files("lute").joinpath("config.jsonc")
-        CONFIG_FILE.write_text(src.read_text())
+    if not themes_dir.exists():
+        themes_dir.mkdir(parents=True, exist_ok=True)
 
 # helper functions to load jsonc files and such
 
@@ -37,6 +35,7 @@ def remove_requireds(data: dict):
     """ Helper func to remove all "required" fields from a json schema """
     if isinstance(data, dict):
         data.pop("required", None)
+        data.pop("dependentRequired")
         for value in data.values():
             remove_requireds(value)
     elif isinstance(data, list):
@@ -585,8 +584,9 @@ class ThemeNode:
 
 class Theme(ThemeNode):
     @classmethod
-    def load_full(cls) -> "Theme":
+    def load_full(cls, theme_name=None) -> "Theme":
         config = Config.load()
+        theme_name = theme_name if theme_name is not None else config.selected_theme
         ensure_themes_path(config)
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)
@@ -604,7 +604,7 @@ class Theme(ThemeNode):
                 recursive_normalization(user_defaults, schema, schema)
                 user_defaults = convert_strs_to_color_refs(user_defaults)
 
-            selected_theme_path = config.themes_dir / f"{config.selected_theme}.jsonc"
+            selected_theme_path = config.themes_dir / f"{theme_name}.jsonc"
             selected_theme = load_jsonc_req(selected_theme_path)
             validate_fonts(selected_theme)
             recursive_normalization(selected_theme, schema, schema)
@@ -629,8 +629,8 @@ class Theme(ThemeNode):
 
     @classmethod
     def load_file(cls) -> "Theme":
-        ensure_themes_path()
         config = Config.load()
+        ensure_themes_path(config)
         with as_file(files("lute").joinpath("theme.schema.json")) as file:
             schema = load_jsonc(file)
 
