@@ -180,6 +180,7 @@ def normalize_spacing_scale(value):
 # POST-MERGE NORMALIZATIONS
 
 def final_normalization(value, field_schema, schema):
+    is_root = field_schema is schema
     if "$ref" in field_schema:
         resolved_schema = resolve(field_schema["$ref"], schema)
         return final_normalization(value, resolved_schema, schema)
@@ -210,6 +211,8 @@ def final_normalization(value, field_schema, schema):
         for index in range(len(value)): 
             value[index] = final_normalization(value[index], field_schema["items"], schema)
 
+    if is_root:
+        value = normalize_bw(value)
     return value
 
 def normalize_font_sizes(fonts: dict) -> dict:
@@ -228,6 +231,17 @@ def normalize_effect(effect: dict, schema: dict):
             continue
         effect[scope] = deep_merge(effect["default"], effect.get(scope, {}))
     return effect
+
+def normalize_bw(theme: dict) -> dict:  # AI-generated
+    palette = theme["colors"]["palette"]
+    for name in ("black", "white"):
+        color = palette[name]
+        palette[name] = {
+            "base": color,
+            "light": color,
+            "dark": color,
+        }
+    return theme
 
 # fonts validation
 def validate_fonts(data: dict):

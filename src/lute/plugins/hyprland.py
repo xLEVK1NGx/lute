@@ -52,9 +52,6 @@ class HyprlandPlugin(Plugin):
             palette_dict = {}
 
             for color, obj in vars(palette).items():
-                if color == "white" or color == "black":
-                    palette_dict[color] = obj
-                    continue
                 for shade, value in vars(obj).items():
                     palette_dict[f"{color}_{shade}"] = value
             palette_strs = "\n".join(
